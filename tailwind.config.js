@@ -1,0 +1,41 @@
+module.exports = {
+  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+    extend: {
+      colors: {
+        azure: "#5383e8",
+        customGray: "#EAEAEA",
+        lankGray: "#e0e3e3",
+        lankBorderGray: "#ced3d3",
+        lankTextGray: "#657070",
+        lankTextYellow: "#eabd56",
+        layoutBorderColor: "#c6cbcb",
+        soloRatingText: "#879292",
+        soloRatingTextBlue: "#1f8ecd",
+        soloRatingTextGray: "#555e5e",
+        soloRatingBoxBackground: "#f2f2f2",
+        soloRatingBoxBorder: "#cdd2d2",
+        championInfoBg: "#ededed",
+        winGraph: "#3d95e5",
+        winGraphBorder: "#3480c6",
+        loseGraph: "#ee5a52",
+        loseGraphBorder: "#c6443e",
+        gameAvgGreen: "#2daf7f",
+        gameAvgYellow: "#e19205",
+        gameListRedBg: "#e2b6b3",
+        gameListRedBorder: "#cea7a7",
+        gameListRedMoreBg: "#e89d99",
+        gameListRedMoreBorder: "#d67b77",
+        gameListBlueBg: "#a3cfec",
+        gameListBlueBorder: "#99b9cf",
+        gameListBlueMoreBg: "#64b1e4",
+        gameListBlueMoreBorder: "#4aa1d2",
+      },
+    },
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+};
