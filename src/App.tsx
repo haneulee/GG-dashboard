@@ -13,7 +13,7 @@ function App() {
       <Header />
       <MyInfo />
       <div className="border-layoutBorderColor border" />
-      <div className="flex flex-row p-10">
+      <div className="flex flex-row p-10 max-w-6xl self-center">
         <div className="flex flex-col w-5/12">
           <SoloRating />
           <SubTier />
