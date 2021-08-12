@@ -1,7 +1,13 @@
 import React from "react";
 
+interface IMostChampionsProps {
+    champions?: {
 
-export const MostChampion: React.FC = () => {
+    }
+}
+
+
+export const MostChampion: React.FC<IMostChampionsProps> = ({ champions }) => {
     return (
         <div className="flex flex-col w-full text-soloRatingText text-sm border-r border-soloRatingBoxBorder">
             <Champion />

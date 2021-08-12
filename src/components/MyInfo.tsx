@@ -1,15 +1,20 @@
 import React from "react";
 import useFetch from "../hooks/useFetch";
 
-const testId = "Hide on bush";
+interface IMyInfoProps {
+    summoner?: {
+        name?: string;
+        level?: number;
+        ladderRank?: {
+            rank?: number;
+            rankPercentOfTop?: number;
+        }
+        profileImageUrl?: string;
+        profileBorderImageUrl?: string;
+    }
+}
 
-export const MyInfo: React.FC = () => {
-    const { loading, data: summoner, error } = useFetch(`https://codingtest.op.gg/api/summoner/${testId}?hl=ko`);
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error!</p>;
-
-    console.log(summoner);
+export const MyInfo: React.FC<IMyInfoProps> = ({ summoner }) => {
 
     return (
         <div className="bg-gray-200 w-full h-60 p-30 flex flex-col pl-40 pr-40 text-gray-500">
@@ -22,13 +27,13 @@ export const MyInfo: React.FC = () => {
             </div>
             <div className="flex flex-row">
                 <div className="w-32 h-32 mr-5 relative">
-                    <div className="absolute bg-center bg-no-repeat w-32 h-32" style={{ backgroundImage: "url(//opgg-static.akamaized.net/images/borders2/silver.png)" }}></div>
-                    <img width="100px" height="100px" className="m-auto mt-3" src="//opgg-static.akamaized.net/images/profile_icons/profileIcon4904.jpg?image=q_auto:best&amp;v=1518361200" />
-                    <span className="text-lankTextYellow absolute w-11 left-10 bottom-1 pl-2.5 box-border" title="레벨" style={{ backgroundImage: "url(https://opgg-static.akamaized.net/images/site/summoner/bg-levelbox.png)" }}>173</span>
+                    <div className="absolute bg-center bg-no-repeat w-32 h-32" style={{ backgroundImage: `url(${summoner?.profileBorderImageUrl})` }}></div>
+                    <img width="100px" height="100px" className="m-auto mt-3" src={summoner?.profileImageUrl} />
+                    <span className="text-lankTextYellow absolute w-11 left-10 bottom-1 pl-2.5 box-border" title="레벨" style={{ backgroundImage: "url(https://opgg-static.akamaized.net/images/site/summoner/bg-levelbox.png)" }}>{summoner?.level}</span>
                 </div>
                 <div className="flex flex-col">
-                    <div className="text-2xl font-bold mt-5">플레이어아이디</div>
-                    <div>레더 랭킹 <b>363,499</b>위 (상위 40.7%)</div>
+                    <div className="text-2xl font-bold mt-5">{summoner?.name}</div>
+                    <div>레더 랭킹 <b>{summoner?.ladderRank?.rank}</b>위 (상위 {summoner?.ladderRank?.rankPercentOfTop}%)</div>
                 </div>
             </div>
         </div>

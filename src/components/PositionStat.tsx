@@ -1,7 +1,12 @@
 import React from "react";
 
+interface IPositionStatProps {
+    positions?: {
 
-export const PositionStat: React.FC = () => {
+    }
+}
+
+export const PositionStat: React.FC<IPositionStatProps> = ({ positions }) => {
     return (
         <div className="flex flex-row w-full text-soloRatingText text-sm ">
             <div className="flex flex-row">

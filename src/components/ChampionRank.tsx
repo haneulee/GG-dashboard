@@ -1,42 +1,64 @@
 import React from "react";
 
+interface IChampionRankProps {
+    champion?: {
+        name: string;
+        cs: number;
+        rank: number;
+        imageUrl: string;
+        games: number;
+        kills: number;
+        assists: number;
+        deaths: number;
+        wins: number;
+    };
+}
 
-export const ChampionRank: React.FC = () => {
+export const ChampionRank: React.FC<IChampionRankProps> = ({ champion }) => {
+    const kills = champion?.kills || 1;
+    const assists = champion?.assists || 1;
+    const deaths = champion?.deaths || 1;
+    const games = champion?.games || 1;
+    const wins = champion?.wins || 1;
+
+    const kda = Math.round((kills + assists) / deaths);
+    const winPct = Math.round((wins / games) * 100);
+
+    const kdaColor = kda >= 5 ? "text-gameAvgYellow" : kda >= 4 ? "text-kdaBlue" : kda >= 3 ? "text-kdaGreen" : "text-soloRatingTextGra";
+
     return (
         <div className="bg-championInfoBg flex flex-row justify-between text-center border-b border-soloRatingBoxBorder">
-            <div className="pl-3 py-2" title="레오나">
+            <div className="pl-3 py-2" title={champion?.name}>
                 <a href="/champion/leona/statistics" target="_blank">
-                    <img src="//opgg-static.akamaized.net/images/lol/champion/Leona.png?image=c_scale,q_auto,w_45&amp;v=1626880099" width="45" className="rounded-full" alt="레오나" />
+                    <img src={champion?.imageUrl} width="45" className="rounded-full" alt={champion?.name} />
                 </a>
             </div>
-            <div className="p-2">
-                <div className="text-soloRatingTextGray font-bold text-left" title="레오나">
-                    <a href="/champion/leona/statistics" target="_blank">
-                        레오나
-                    </a>
+            <div className="px-1 py-2 text-left">
+                <div className="text-soloRatingTextGray font-bold text-left w-20 truncate" title={champion?.name}>
+                    {champion?.name}
                 </div>
                 <div className="text-xs" title="평균 CS (CS/분)">
-                    CS 38.9 (1.4)
+                    CS {champion?.cs} ({champion?.rank})
                 </div>
             </div>
-            <div className="p-2">
-                <div className="text-soloRatingTextGray font-bold" title="">
-                    <span className="KDA">2.29:1</span>
+            <div className="px-1 py-2">
+                <div className={`${kdaColor} font-bold`} title="">
+                    <span className="KDA">{kda}:1</span>
                     <span className="Text">평점</span>
                 </div>
                 <div className="text-xs">
-                    <span className="Kill">2.9</span>
+                    <span className="Kill">{champion?.kills}</span>
                     <span className="Bar">/</span>
-                    <span className="Death">7.3</span>
+                    <span className="Death">{champion?.assists}</span>
                     <span className="Bar">/</span>
-                    <span className="Assist">13.8</span>
+                    <span className="Assist">{champion?.deaths}</span>
                 </div>
             </div>
-            <div className="p-2">
-                <div className="text-soloRatingTextGray font-bold" title="">
-                    54%
+            <div className="px-1 py-2">
+                <div className={`${winPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'} font-bold`} title="">
+                    {winPct}%
                 </div>
-                <div className="text-xs">331 게임</div>
+                <div className="text-xs">{champion?.games} 게임</div>
             </div>
         </div>
 

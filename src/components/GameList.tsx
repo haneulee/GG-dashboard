@@ -1,7 +1,13 @@
 import React from "react";
 import { Game } from "./Game";
 
-export const GameList: React.FC = () => {
+interface IGameListProps {
+    games?: {
+
+    }
+}
+
+export const GameList: React.FC<IGameListProps> = ({ games }) => {
 
     return (
         <>

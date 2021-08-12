@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 
+interface IuseFetchProps {
+    loading?: boolean,
+    data?: any,
+    error?: string,
+}
 
-function useFetch(url: string) {
+function useFetch(url: string): IuseFetchProps {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState(null);
-    const [error, setError] = useState(null);
+    const [data, setData] = useState();
+    const [error, setError] = useState();
 
     useEffect(() => {
         window

@@ -36,6 +36,8 @@ module.exports = {
         gameBadgeBorder: "#7f3590",
         gameMoreRed: "#C6453F",
         gameMoreBlue: "#07669F",
+        kdaBlue: "#1f8ecd",
+        kdaGreen: "#2daf7f",
       },
     },
   },
