@@ -1,15 +1,25 @@
 import React from "react";
 
+interface ITeamPlayerProps {
+    player: {
+        champion: {
+            imageUrl: string;
+            level: number;
+        }
+        summonerId: string;
+        summonerName: string;
+    }
+}
 
-export const TeamPlayer: React.FC = () => {
+export const TeamPlayer: React.FC<ITeamPlayerProps> = ({ player }) => {
     return (
-        <div className="Summoner flex flex-row ml-1 pb-1">
-            <div className="ChampionImage">
-                <div className="bg-center bg-no-repeat w-5 h-4" style={{ backgroundImage: "url(//opgg-static.akamaized.net/assets/champion16.png?image=q_auto&v=1626880099)", backgroundPosition: "0px -2336px" }}></div>
+        <div className="Summoner flex flex-row ml-1 pb-1 " style={{ minWidth: "88px" }}>
+            <div className="ChampionImage w-5 mr-2">
+                <img src={player.champion.imageUrl} />
             </div>
-            <div className="SummonerName" style={{ maxWidth: "60px" }}>
-                <a href="//www.op.gg/summoner/userName=Stay+Late" className="no-underline truncate block" target="_blank">Stay Late</a>
+            <div className="SummonerName truncate" style={{ maxWidth: "60px" }}>
+                {player.summonerName}
             </div>
-        </div>
+        </div >
     )
 };

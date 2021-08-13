@@ -10,8 +10,8 @@ import useFetch from './hooks/useFetch';
 function App() {
   const testId = "Hide on bush";
   const { loading, data, error } = useFetch(`https://codingtest.op.gg/api/summoner/${testId}`);
+  const matchResult = useFetch(`https://codingtest.op.gg/api/summoner/${testId}/matches`);
 
-  // console.log(data);
 
   return (
     <div className="flex flex-col bg-customGray">
@@ -27,7 +27,7 @@ function App() {
               <ChampionInfo />
             </div>
             <div className="flex flex-col w-full pl-3">
-              <GameInfo />
+              <GameInfo result={matchResult} />
             </div>
           </div>
         </>

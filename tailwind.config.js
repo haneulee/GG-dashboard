@@ -38,6 +38,19 @@ module.exports = {
         gameMoreBlue: "#07669F",
         kdaBlue: "#1f8ecd",
         kdaGreen: "#2daf7f",
+        gameWinBlue: "#1a78ae",
+        tooltipColor: "#222727",
+      },
+      keyframes: {
+        tooltip: {
+          "0%": { opacity: 0 },
+          "40%": { opacity: 0 },
+          "50%": { opacity: 1 },
+          "100%": { opacity: 1 },
+        },
+      },
+      animation: {
+        tooltip: "tooltip 2s ease-in-out",
       },
     },
   },

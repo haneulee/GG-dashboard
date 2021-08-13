@@ -33,11 +33,11 @@ export const WeekRank: React.FC<IWeekRankProps> = ({ recentWin }) => {
             <div className="p-2 self-center">
                 <div className="h-5 flex flex-row rounded-lg relative">
                     <div className="h-full bg-winGraph border border-winGraphBorder" style={{ width: `${winPct}px` }}>
-                        <div className="text-xs text-left text-white absolute">{recentWin?.wins}승</div>
+                        <div className="text-xs text-left text-white absolute ml-1">{recentWin?.wins}승</div>
                     </div>
 
                     <div className="h-full bg-loseGraph border border-loseGraphBorder" style={{ width: `${100 - winPct}px` }}>
-                        <div className="text-xs text-right text-white absolute right-0">{recentWin?.losses}패</div>
+                        <div className="text-xs text-right text-white absolute right-0 mr-1">{recentWin?.losses}패</div>
                     </div>
                 </div>
             </div>

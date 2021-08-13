@@ -54,7 +54,7 @@ export const ChampionRank: React.FC<IChampionRankProps> = ({ champion }) => {
                     <span className="Assist">{champion?.deaths}</span>
                 </div>
             </div>
-            <div className="px-1 py-2">
+            <div className="p-2">
                 <div className={`${winPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'} font-bold`} title="">
                     {winPct}%
                 </div>
