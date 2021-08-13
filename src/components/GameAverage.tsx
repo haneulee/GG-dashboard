@@ -10,7 +10,6 @@ interface IGameAverageProps {
     }
 }
 
-
 export const GameAverage: React.FC<IGameAverageProps> = ({ summary }) => {
     const games = (summary?.wins || 0) + (summary?.losses || 0);
     const kills = summary?.kills || 1;
@@ -20,15 +19,9 @@ export const GameAverage: React.FC<IGameAverageProps> = ({ summary }) => {
 
     const kda = Math.round((kills + assists) / deaths);
     const winPct = Math.round((wins / games) * 100);
+    const killPct = Math.round((kills / assists) * 100);
 
     const kdaColor = kda >= 5 ? "text-gameAvgYellow" : kda >= 4 ? "text-kdaBlue" : kda >= 3 ? "text-kdaGreen" : "text-soloRatingTextGra";
-
-    const options = {
-        series: [{
-            type: 'pie',
-            data: [1, 2, 3]
-        }]
-    }
 
     return (
         <div className="flex flex-row w-full text-soloRatingText text-sm border-r border-soloRatingBoxBorder">
@@ -53,7 +46,7 @@ export const GameAverage: React.FC<IGameAverageProps> = ({ summary }) => {
                     </div>
                     <div className="text-lg">
                         <span className={`${kdaColor} font-bold`}>{kda}:1 </span>
-                        <span className={`${winPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'} font-bold`} title="">(<span>{winPct}%</span>)</span>
+                        <span className={`${killPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'} font-bold`} title="">(<span>{killPct}%</span>)</span>
                     </div>
                 </div>
             </div>
