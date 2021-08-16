@@ -18,7 +18,7 @@ export const SoloRating: React.FC<ISoloRatingProps> = ({ leagueInfo }) => {
     return (
         <div className="flex flex-row w-full h-30 p-5 m-2 text-soloRatingText text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
             <div className="w-20 h-20" title="솔랭">
-                <img src={leagueInfo?.tierRank?.imageUrl} className="Image" />
+                <img src={leagueInfo?.tierRank?.imageUrl} className="Image" alt="" />
             </div>
             <div className="ml-5">
                 <div className="text-xs">솔로랭크</div>

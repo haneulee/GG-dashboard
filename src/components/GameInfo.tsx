@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
+import { useQuery } from "react-query";
 import { GameAverage } from "./GameAverage";
 import { GameList } from "./GameList";
 import { MostChampion } from "./MostChampion";
 import { PositionStat } from "./PositionStat";
 
 interface IGameInfoProps {
-    result?: {
-        loading?: boolean,
-        data?: any,
-        error?: string,
-    }
+    summonerId: string;
 }
 
-export const GameInfo: React.FC<IGameInfoProps> = ({ result }) => {
+export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
     const [gameType, setGameType] = useState('all');
-    const [localGame, setLocalGame] = useState(result?.data?.games);
+    const { isLoading, error, data } = useQuery('summoner_match', () => fetch(
+        `https://codingtest.op.gg/api/summoner/${summonerId}/matches`
+    ).then((res) => res.json())
+    );
+    const [localGame, setLocalGame] = useState(data?.games);
 
     useEffect(() => {
-        if (result?.data?.games) {
-            setLocalGame(result?.data?.games);
+        if (data?.games) {
+            setLocalGame(data?.games);
         }
-    }, [result?.data?.games])
+    }, [data?.games])
 
-    if (result?.loading) return <p>Loading...</p>;
-    if (result?.error) return <p>Error!</p>;
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error!</p>;
 
     const onTabClick = (e: any) => {
         const { target } = e;
@@ -33,13 +33,13 @@ export const GameInfo: React.FC<IGameInfoProps> = ({ result }) => {
         if (targetType !== gameType) {
             switch (targetType) {
                 case 'all':
-                    setLocalGame(result?.data?.games.filter((game: any) => game.gameType))
+                    setLocalGame(data?.games.filter((game: any) => game.gameType))
                     break;
                 case 'solo':
-                    setLocalGame(result?.data?.games.filter((game: any) => game.gameType === '솔랭'))
+                    setLocalGame(data?.games.filter((game: any) => game.gameType === '솔랭'))
                     break;
                 case 'free':
-                    setLocalGame(result?.data?.games.filter((game: any) => game.gameType === '자유 5:5 랭크'))
+                    setLocalGame(data?.games.filter((game: any) => game.gameType === '자유 5:5 랭크'))
                     break;
 
                 default:
@@ -64,12 +64,12 @@ export const GameInfo: React.FC<IGameInfoProps> = ({ result }) => {
                     </div>
                 </div>
                 <div className="flex flex-row bg-championInfoBg">
-                    <GameAverage summary={result?.data?.summary} />
-                    <MostChampion champions={result?.data?.champions} />
-                    <PositionStat positions={result?.data?.positions} />
+                    <GameAverage summary={data?.summary} />
+                    <MostChampion champions={data?.champions} />
+                    <PositionStat positions={data?.positions} />
                 </div>
             </div>
-            <GameList games={localGame} />
+            <GameList games={localGame} summonerId={summonerId} />
         </>
     )
 };

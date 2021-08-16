@@ -1,5 +1,4 @@
 import React from "react";
-import useFetch from "../hooks/useFetch";
 
 interface IMyInfoProps {
     summoner?: {
@@ -28,7 +27,7 @@ export const MyInfo: React.FC<IMyInfoProps> = ({ summoner }) => {
             <div className="flex flex-row">
                 <div className="w-32 h-32 mr-5 relative">
                     <div className="absolute bg-center bg-no-repeat w-32 h-32" style={{ backgroundImage: `url(${summoner?.profileBorderImageUrl})` }}></div>
-                    <img width="100px" height="100px" className="m-auto mt-3" src={summoner?.profileImageUrl} />
+                    <img width="100px" height="100px" className="m-auto mt-3" src={summoner?.profileImageUrl} alt="" />
                     <span className="text-lankTextYellow absolute w-11 left-10 bottom-1 pl-2.5 box-border" title="레벨" style={{ backgroundImage: "url(https://opgg-static.akamaized.net/images/site/summoner/bg-levelbox.png)" }}>{summoner?.level}</span>
                 </div>
                 <div className="flex flex-col">

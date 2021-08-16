@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import useFetch from "../hooks/useFetch";
+import { useQuery } from 'react-query';
 import { ChampionRank } from "./ChampionRank";
 import { WeekRank } from "./WeekRank";
 
-export const ChampionInfo: React.FC = () => {
-    const testId = "Hide on bush";
-    const [tab, setTab] = useState('champion');
-    const { loading, data, error } = useFetch(`https://codingtest.op.gg/api/summoner/${testId}/mostInfo`);
+interface IChampionInfoProps {
+    summonerId: string;
+}
 
-    if (loading) return <p>Loading...</p>;
+export const ChampionInfo: React.FC<IChampionInfoProps> = ({ summonerId }) => {
+    const [tab, setTab] = useState('champion');
+    const { isLoading, error, data } = useQuery('summoner_mostInfo', () => fetch(
+        `https://codingtest.op.gg/api/summoner/${summonerId}/mostInfo`
+    ).then((res) => res.json())
+    );
+
+    if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error!</p>;
 
-    // console.log(data);
     let { champions, recentWinRate } = data;
 
     champions.sort((a: any, b: any) => {

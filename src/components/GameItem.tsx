@@ -1,5 +1,5 @@
-
-import useFetch from "../hooks/useFetch";
+import React from 'react'
+import { useQuery } from "react-query";
 import { convertSeconds, timeSince } from "../util/utility";
 import { TeamPlayer } from "./TeamPlayer";
 import { Tooltip } from "./Tooltip";
@@ -43,14 +43,17 @@ interface IGameItemProps {
         summonerId: string;
         summonerName: string;
         tierRankShort: string;
-    }
+    },
+    summonerId: string;
 }
 
-export const GameItem: React.FC<IGameItemProps> = ({ game }) => {
-    const testId = "Hide on bush";
-    const { loading, data, error } = useFetch(`https://codingtest.op.gg/api/summoner/${testId}/matchDetail/${game.gameId}`);
+export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
+    const { isLoading, error, data } = useQuery('summoner_matchDetail', () => fetch(
+        `https://codingtest.op.gg/api/summoner/${summonerId}/matchDetail/${game.gameId}`
+    ).then((res) => res.json())
+    );
 
-    if (loading) return <p>Loading...</p>;
+    if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error!</p>;
 
     const { teams } = data;
@@ -59,7 +62,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game }) => {
         const result = [];
         for (let i = 0; i < count; i++) {
             result.push(<div key={i} className="Item w-7 m-0.5">
-                <img src="https://opgg-static.akamaized.net/images/pattern/opacity.1.png" className="rounded-lg w-full" />
+                <img src="https://opgg-static.akamaized.net/images/pattern/opacity.1.png" className="rounded-lg w-full" alt="" />
             </div>);
         }
         return result;
@@ -85,11 +88,11 @@ export const GameItem: React.FC<IGameItemProps> = ({ game }) => {
                     <img src={game?.champion?.imageUrl} className="rounded-full w-12 h-12" alt={game?.summonerName} />
                     <div className="pl-1">
                         {game?.spells.map((spell, i) =>
-                            <img key={i} src={spell.imageUrl} className="rounded-md w-6 h-6" />)}
+                            <img key={i} src={spell.imageUrl} className="rounded-md w-6 h-6" alt="" />)}
                     </div>
                     <div className="pl-1">
                         {game?.peak.map((peakItem, i) =>
-                            <img key={i} src={peakItem} className="rounded-md w-6 h-6" />)}
+                            <img key={i} src={peakItem} className="rounded-md w-6 h-6" alt="" />)}
                     </div>
                 </div>
                 <div className="pt-2">
@@ -131,16 +134,16 @@ export const GameItem: React.FC<IGameItemProps> = ({ game }) => {
                     {game.items.map((item, i) =>
                         <Tooltip key={i} message="평점은 0~10점을 기준으로 경기에 기여한 정도에 따라 차등 부여되며 탈주 등 패배에 결정적인 영향을 끼친 경우 0점에 가까운 점수가 부여됩니다.">
                             <div className="Item w-7 m-0.5">
-                                <img src={item.imageUrl} className="rounded-lg " />
+                                <img src={item.imageUrl} className="rounded-lg " alt="" />
                             </div>
                         </Tooltip>)}
                     {game.items.length < 7 && renderNoImg(7 - game.items.length)}
                     <button className="Button OpenBuildButton " title="" type="button">
-                        <img src={game.isWin ? "//opgg-static.akamaized.net/css3/sprite/images/icon-buildblue-p.png" : "//opgg-static.akamaized.net/css3/sprite/images/icon-buildred-p.png"} />
+                        <img src={game.isWin ? "//opgg-static.akamaized.net/css3/sprite/images/icon-buildblue-p.png" : "//opgg-static.akamaized.net/css3/sprite/images/icon-buildred-p.png"} alt="" />
                     </button>
                 </div>
                 <div className="Trinket flex flex-row justify-center m-1">
-                    <img src="//opgg-static.akamaized.net/images/site/summoner/icon-ward-red.png" className="mr-1" />
+                    <img src="//opgg-static.akamaized.net/images/site/summoner/icon-ward-red.png" className="mr-1" alt="" />
                     <span className="wards vision">제어 와드 {game.stats.ward.visionWardsBought}</span></div>
             </div>
             <div className="p-2 self-center flex flex-row">
@@ -149,7 +152,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game }) => {
                         {team.players.map((player, j) => <TeamPlayer key={j} player={player} />)}
                     </div>)}
             </div>
-            <div className={`align-items-center w-10 border ${game?.isWin ? 'bg-gameListBlueMoreBg border-gameListBlueMoreBorder' : 'bg-gameListRedMoreBg  border-gameListRedMoreBorder'}`}>
+            <div className={`align-items-center border ${game?.isWin ? 'bg-gameListBlueMoreBg border-gameListBlueMoreBorder' : 'bg-gameListRedMoreBg  border-gameListRedMoreBorder'}`} style={{ minWidth: "40px" }}>
                 <i className={`border-solid inline-block border-r-2 border-b-2 transform rotate-45 p-1 mt-24 ${game?.isWin ? 'border-gameMoreBlue' : 'border-gameMoreRed'}`}></i>
             </div>
         </div>
