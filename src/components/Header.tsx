@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import { Link, useHistory } from "react-router-dom";
 import { useQuery } from 'react-query';
+import Loading from "../lottie/lottie-loading.json"
+import Lottie from 'react-lottie';
 
 export const Header: React.FC = () => {
     const history = useHistory();
@@ -83,26 +85,30 @@ export const Header: React.FC = () => {
 
                     < div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${!(isFocus && keyword) ? "hidden" : ""}`} >
                         <div className="flex flex-col text-center">
-                            {isLoading || !data ? <p>Loading...</p> :
-                                <div onClick={(e) => onSubmit(e, data.summoner.name)} className="cursor-pointer flex flex-row text-center text-xs">
-                                    <div className="pl-3 py-2" title={data.summoner?.name}>
-                                        <img src={data.summoner?.profileImageUrl} width="40" className="rounded-full" alt={data.summoner?.name} />
-                                    </div>
-                                    <div className="p-2 flex flex-col text-left">
-                                        <div className="text-recentSearchColor font-bold text-base truncate w-px200" title={data.summoner?.name}>
-                                            {data.summoner?.name}
+                            {isLoading || !data ?
+                                <Lottie
+                                    options={{ animationData: Loading }}
+                                    style={{ width: '100%', height: '100%' }}
+                                /> : error ? <p>Error!</p> :
+                                    <div onClick={(e) => onSubmit(e, data.summoner.name)} className="cursor-pointer flex flex-row text-center text-xs">
+                                        <div className="pl-3 py-2" title={data.summoner?.name}>
+                                            <img src={data.summoner?.profileImageUrl} width="40" className="rounded-full" alt={data.summoner?.name} />
                                         </div>
-                                        <div>
-                                            <span >
-                                                {data.summoner?.leagues[0].tierRank.tier}
-                                            </span>
-                                            <span> - </span>
-                                            <span>
-                                                {data.summoner?.leagues[0].tierRank.lp} LP
-                                            </span>
+                                        <div className="p-2 flex flex-col text-left">
+                                            <div className="text-recentSearchColor font-bold text-base truncate w-px200" title={data.summoner?.name}>
+                                                {data.summoner?.name}
+                                            </div>
+                                            <div>
+                                                <span >
+                                                    {data.summoner?.leagues[0].tierRank.tier}
+                                                </span>
+                                                <span> - </span>
+                                                <span>
+                                                    {data.summoner?.leagues[0].tierRank.lp} LP
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                             }
                         </div>
                     </div>
