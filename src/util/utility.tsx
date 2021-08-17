@@ -1,22 +1,22 @@
 type DateType = Date | string | number;
 
 export const timeSince = (fromDate: DateType = Date.now()) => {
-    let CreatedDate = new Date(fromDate);
-    let today = new Date();
-    let requiredDiffrentDays;
+    const seconds = +Date.now().toString().substr(0, 10) - +new Date(fromDate);
 
-    const oneDay = 24 * 60 * 60 * 1000;
-    const diffDays: number = Math.round(Math.abs((Number(CreatedDate) - Number(today)) / oneDay));
+    if (seconds < 60) return `방금 전`
+    const minutes = seconds / 60
+    if (minutes < 60) return `${Math.floor(minutes)}분 전`
+    const hours = minutes / 60
+    if (hours < 24) return `${Math.floor(hours)}시간 전`
+    const days = hours / 24
+    if (days < 7) return `${Math.floor(days)}일 전`
+    const weeks = days / 7
+    if (weeks < 5) return `${Math.floor(weeks)}주 전`
+    const months = days / 30
+    if (months < 12) return `${Math.floor(months)}개월 전`
+    const years = days / 365
 
-    if (diffDays >= 360) {
-        requiredDiffrentDays = `${Math.floor(diffDays / 365)}년 전`
-    } else if (diffDays >= 30) {
-        requiredDiffrentDays = `${Math.floor(diffDays / 30)}달 전`
-    } else if (diffDays < 30) {
-        requiredDiffrentDays = `${diffDays}일 전`
-    }
-
-    return requiredDiffrentDays;
+    return `${Math.floor(years)}년 전`
 }
 
 export const convertSeconds = (s: number) => {

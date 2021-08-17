@@ -61,16 +61,16 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
     const renderNoImg = (count: number) => {
         const result = [];
         for (let i = 0; i < count; i++) {
-            result.push(<div key={i} className="Item w-7 m-0.5">
-                <img src="https://opgg-static.akamaized.net/images/pattern/opacity.1.png" className="rounded-lg w-full" alt="" />
+            result.push(<div key={i} className="pr-px2 pb-px2">
+                <img src="https://opgg-static.akamaized.net/images/pattern/opacity.1.png" className="rounded-sm w-full" alt="" width="22px" />
             </div>);
         }
         return result;
     };
 
     return (
-        <div className={`flex flex-row w-full h-32 justify-between m-2 border ${game?.isWin ? 'bg-gameListBlueBg  border-gameListBlueBorder' : 'bg-gameListRedBg  border-gameListRedBorder'} text-soloRatingTextGray text-xs text-center`}>
-            <div className="p-2 self-center" style={{ minWidth: "73px" }}>
+        <div className={`flex flex-row w-full h-px96 justify-end m-2 border ${game?.isWin ? 'bg-gameListBlueBg  border-gameListBlueBorder' : 'bg-gameListRedBg  border-gameListRedBorder'} text-soloRatingTextGray text-xs text-center`}>
+            <div className="p-1 self-center" style={{ minWidth: "73px" }}>
                 <div className="font-bold" title={game?.gameType}>
                     {game?.gameType}
                 </div>
@@ -83,7 +83,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
                 </div>
                 <div className="GameLength">{convertSeconds(game?.gameLength)}</div>
             </div>
-            <div className="p-2 self-center flex flex-col min-w-max">
+            <div className="p-1 self-center flex flex-col min-w-max">
                 <div className="flex flex-row">
                     <img src={game?.champion?.imageUrl} className="rounded-full w-12 h-12" alt={game?.summonerName} />
                     <div className="pl-1">
@@ -99,7 +99,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
                     {game?.summonerName}
                 </div>
             </div>
-            <div className="p-1 self-center min-w-max">
+            <div className="p-1 self-center min-w-max" style={{ width: "120px" }}>
                 <div className="KDA text-sm pb-1">
                     <span className="Kill font-bold">{game?.stats.general.kill}</span> /
                     <span className="Death font-bold text-loseGraphBorder"> {game?.stats.general.death}</span> /
@@ -113,7 +113,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
                     {game.stats.general.opScoreBadge && <span className="bg-gameBadgeBg border-gameBadgeBorder border rounded-lg px-1 ml-1">{game.stats.general.opScoreBadge}</span>}
                 </div>
             </div>
-            <div className="p-2 self-center">
+            <div className="p-1 self-center text-xs" style={{ minWidth: "80px" }}>
                 <div className="Level">
                     레벨{game.champion.level}
                 </div>
@@ -129,31 +129,31 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
                     <b className="text-gameTextBlack">Silver 3</b>
                 </div>
             </div>
-            <div className="p-2 self-center">
+            <div className="p-1 self-center">
                 <div className="grid grid-cols-4 min-w-max">
                     {game.items.map((item, i) =>
                         <Tooltip key={i} message="평점은 0~10점을 기준으로 경기에 기여한 정도에 따라 차등 부여되며 탈주 등 패배에 결정적인 영향을 끼친 경우 0점에 가까운 점수가 부여됩니다.">
-                            <div className="Item w-7 m-0.5">
-                                <img src={item.imageUrl} className="rounded-lg " alt="" />
+                            <div className="pr-px2 pb-px2 cursor-pointer">
+                                <img src={item.imageUrl} className=" rounded-sm " alt="" width="22px" />
                             </div>
                         </Tooltip>)}
                     {game.items.length < 7 && renderNoImg(7 - game.items.length)}
-                    <button className="Button OpenBuildButton " title="" type="button">
-                        <img src={game.isWin ? "//opgg-static.akamaized.net/css3/sprite/images/icon-buildblue-p.png" : "//opgg-static.akamaized.net/css3/sprite/images/icon-buildred-p.png"} alt="" />
+                    <button className="Button OpenBuildButton pl-px2" title="" type="button">
+                        <img src={game.isWin ? "//opgg-static.akamaized.net/css3/sprite/images/icon-buildblue-p.png" : "//opgg-static.akamaized.net/css3/sprite/images/icon-buildred-p.png"} alt="" width="22px" />
                     </button>
                 </div>
                 <div className="Trinket flex flex-row justify-center m-1">
                     <img src="//opgg-static.akamaized.net/images/site/summoner/icon-ward-red.png" className="mr-1" alt="" />
                     <span className="wards vision">제어 와드 {game.stats.ward.visionWardsBought}</span></div>
             </div>
-            <div className="p-2 self-center flex flex-row">
+            <div className="p-1 self-center flex flex-row">
                 {teams.map((team: { players: any[]; }, i: number) =>
                     <div key={i} className="Team flex flex-col">
                         {team.players.map((player, j) => <TeamPlayer key={j} player={player} />)}
                     </div>)}
             </div>
-            <div className={`align-items-center border ${game?.isWin ? 'bg-gameListBlueMoreBg border-gameListBlueMoreBorder' : 'bg-gameListRedMoreBg  border-gameListRedMoreBorder'}`} style={{ minWidth: "40px" }}>
-                <i className={`border-solid inline-block border-r-2 border-b-2 transform rotate-45 p-1 mt-24 ${game?.isWin ? 'border-gameMoreBlue' : 'border-gameMoreRed'}`}></i>
+            <div className={`align-items-center border ${game?.isWin ? 'bg-gameListBlueMoreBg border-gameListBlueMoreBorder' : 'bg-gameListRedMoreBg  border-gameListRedMoreBorder'}`} style={{ minWidth: "30px" }}>
+                <i className={`border-solid inline-block border-r-2 border-b-2 transform rotate-45 p-1 mt-20 ${game?.isWin ? 'border-gameMoreBlue' : 'border-gameMoreRed'}`}></i>
             </div>
         </div>
     )

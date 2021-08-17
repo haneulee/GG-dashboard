@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Home } from "../pages/Home";
 import { Summoner } from "../pages/Summoner";
@@ -12,7 +12,7 @@ const commonRoutes = [
 export const AppRouter = () => {
     return (
         <Router>
-            <div className="flex flex-col bg-customGray">
+            <div className="flex flex-col bg-customGray min-w-min">
                 <Header />
                 <Switch>
                     {commonRoutes.map((route) => (

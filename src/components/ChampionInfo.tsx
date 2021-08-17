@@ -40,12 +40,12 @@ export const ChampionInfo: React.FC<IChampionInfoProps> = ({ summonerId }) => {
     }
 
     return (
-        <div className="w-full h-30 m-2 text-soloRatingText text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
-            <div className="grid justify-items-stretch text-center grid-flow-col border-collapse">
-                <div className={`p-4 border-soloRatingBoxBorder ${tab === 'champion' && 'bg-championInfoBg text-soloRatingTextGray border-r'} ${tab === 'recent' ? 'border-b' : ''}`} onClick={() => onTabClick('champion')}>
+        <div className="w-full h-auto m-2 text-soloRatingText text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
+            <div className="grid grid-cols-2 text-center border-collapse h-10">
+                <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tab === 'champion' && 'bg-championInfoBg text-soloRatingTextGray border-r'} ${tab === 'recent' ? 'border-b' : ''}`} onClick={() => onTabClick('champion')}>
                     챔피언 승률
                 </div>
-                <div className={`p-4 border-soloRatingBoxBorder ${tab === 'recent' && 'bg-championInfoBg text-soloRatingTextGray border-l'} ${tab === 'champion' ? 'border-b' : ''}`} onClick={() => onTabClick('recent')}>
+                <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tab === 'recent' && 'bg-championInfoBg text-soloRatingTextGray border-l'} ${tab === 'champion' ? 'border-b' : ''}`} onClick={() => onTabClick('recent')}>
                     7일간 랭크 승률
                 </div>
             </div>

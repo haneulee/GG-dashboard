@@ -16,7 +16,7 @@ interface IMyInfoProps {
 export const MyInfo: React.FC<IMyInfoProps> = ({ summoner }) => {
 
     return (
-        <div className="bg-gray-200 w-full h-60 p-30 flex flex-col pl-40 pr-40 text-gray-500">
+        <div className="w-px990 h-60 flex flex-col m-auto text-gray-500">
             <div className="flex flex-row p-5 text-xs ">
                 <span className="p-1 mr-3 rounded-md bg-lankGray text-lankTextGray border-2 border-lankBorderGray" title="">
                     <b>S9</b> Silver</span>

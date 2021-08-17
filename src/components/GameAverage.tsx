@@ -24,29 +24,31 @@ export const GameAverage: React.FC<IGameAverageProps> = ({ summary }) => {
     const kdaColor = kda >= 5 ? "text-gameAvgYellow" : kda >= 4 ? "text-kdaBlue" : kda >= 3 ? "text-kdaGreen" : "text-soloRatingTextGra";
 
     return (
-        <div className="flex flex-row w-full text-soloRatingText text-sm border-r border-soloRatingBoxBorder">
+        <div className="flex flex-row w-full text-recentSearchColor text-sm border-r border-soloRatingBoxBorder">
             <div className="flex flex-row">
                 <div className="p-2 flex flex-col text-center self-center">
                     <div className="WinRatioTitle">
                         <span className="total">{games}</span>전
-                        <span className="win">{summary?.wins}</span>승
-                        <span className="lose">{summary?.losses}</span>패
+                        <span className="win"> {summary?.wins}</span>승
+                        <span className="lose"> {summary?.losses}</span>패
                     </div>
-                    <div className="text-xs w-32 h-32">
-                        <div className="relative inline-block rounded-full w-24 h-24 mt-5" style={{ background: `conic-gradient(#1f8ecd 0% ${winPct}%, #c6443e ${winPct}% 100%` }}>
-                            <span className="absolute rounded-full text-lg text-soloRatingTextGray bg-soloRatingBoxBackground w-16 h-16 top-4 left-4 pt-4">{winPct}%</span>
+                    <div className="text-xs w-28 h-28">
+                        <div className="relative inline-block rounded-full w-24 h-24 mt-2" style={{ background: `conic-gradient(#1f8ecd 0% ${winPct}%, #c6443e ${winPct}% 100%` }}>
+                            <span className="absolute rounded-full text-base text-soloRatingTextGray bg-soloRatingBoxBackground w-16 h-16 top-4 left-4 pt-5"><b>{winPct}</b>%</span>
                         </div>
                     </div>
                 </div>
-                <div className="p-2 flex flex-col text-center self-center">
+                <div className="flex flex-col text-center self-center">
                     <div className="text-xs font-bold">
-                        <span className="Kill">{summary?.kills}</span>/
-                        <span className="Death">{summary?.assists}</span>/
+                        <span className="Kill">{summary?.kills}</span>
+                        <span> / </span>
+                        <span className="Death">{summary?.assists}</span>
+                        <span> / </span>
                         <span className="Assist">{summary?.deaths}</span>
                     </div>
-                    <div className="text-lg">
+                    <div className="text-base">
                         <span className={`${kdaColor} font-bold`}>{kda}:1 </span>
-                        <span className={`${killPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'} font-bold`} title="">(<span>{killPct}%</span>)</span>
+                        <span className={`${killPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'}`} title="">(<span>{killPct}%</span>)</span>
                     </div>
                 </div>
             </div>

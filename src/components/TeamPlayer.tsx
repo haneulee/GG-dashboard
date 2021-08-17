@@ -13,11 +13,11 @@ interface ITeamPlayerProps {
 
 export const TeamPlayer: React.FC<ITeamPlayerProps> = ({ player }) => {
     return (
-        <div className="Summoner flex flex-row ml-1 pb-1 " style={{ minWidth: "88px" }}>
-            <div className="ChampionImage w-5 mr-2">
-                <img src={player.champion.imageUrl} alt="" />
+        <div className="Summoner flex flex-row ml-1 pb-0.5 " style={{ width: "70px" }}>
+            <div className="ChampionImage min-w-max pr-1">
+                <img src={player.champion.imageUrl} alt="" width="16px" height="16px" />
             </div>
-            <div className="SummonerName truncate" style={{ maxWidth: "60px" }}>
+            <div className="SummonerName truncate" style={{ maxWidth: "52px" }}>
                 {player.summonerName}
             </div>
         </div >

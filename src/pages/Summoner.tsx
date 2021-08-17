@@ -22,13 +22,13 @@ export const Summoner = () => {
                 <>
                     <MyInfo summoner={data?.summoner} />
                     <div className="border-layoutBorderColor border" />
-                    <div className="flex flex-row p-10 min-w-4xl max-w-6xl self-center">
-                        <div className="flex flex-col w-5/12">
+                    <div className="flex flex-row min-w-max max-w-max m-auto">
+                        <div className="flex flex-col w-px300">
                             <SoloRating leagueInfo={data?.summoner?.['leagues'][0]} />
                             <SubTier leagueInfo={data?.summoner?.['leagues'][1]} />
                             <ChampionInfo summonerId={query} />
                         </div>
-                        <div className="flex flex-col w-full pl-3">
+                        <div className="flex flex-col w-px690 pl-3">
                             <GameInfo summonerId={query} />
                         </div>
                     </div>

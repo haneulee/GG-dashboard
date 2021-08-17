@@ -1,8 +1,9 @@
+import OutsideClickHandler from 'react-outside-click-handler';
 import React, { useEffect, useState } from "react";
-import { useQuery } from 'react-query';
-import { Link, useHistory } from "react-router-dom";
 import useDebounce from "../hooks/useDebounce";
+import { Link, useHistory } from "react-router-dom";
 import { MostChampion } from "./MostChampion";
+import { useQuery } from 'react-query';
 
 export const Header: React.FC = () => {
     const history = useHistory();
@@ -12,7 +13,8 @@ export const Header: React.FC = () => {
     const searchList = JSON.parse(localStorage.getItem('keywords') || '[]');
     const { isLoading, data, refetch } = useQuery('search', () =>
         fetch(
-            `https://www.op.gg/ajax/autocomplete.json/keyword=${keyword}`
+            // `https://www.op.gg/ajax/autocomplete.json/keyword=${keyword}`
+            `https://codingtest.op.gg/api/summoner/${keyword}`
         ).then((res) => res.json())
     );
 
@@ -42,109 +44,111 @@ export const Header: React.FC = () => {
         setKeyword(e.target.value);
     }
 
-    const onSubmit = () => {
-        console.log("submit =====> ", keyword)
-        const keywordList = JSON.parse(localStorage.getItem('keywords') || '[]')
-        console.log(keyword, keywordList);
+    const onSubmit = (e: any, name?: string) => {
+        console.log("submit =====> ", keyword, name)
+        setIsFocus(false);
+        if (!(name || keyword)) return;
 
-        if (keywordList.indexOf(keyword) === -1) {
-            localStorage.setItem('keywords', JSON.stringify(keywordList.concat(keyword)))
+        const summonerName = name || keyword;
+        const keywordList = JSON.parse(localStorage.getItem('keywords') || '[]')
+        console.log(summonerName, keywordList);
+
+        if (keywordList.indexOf(summonerName) === -1) {
+            localStorage.setItem('keywords', JSON.stringify(keywordList.concat(summonerName)))
         }
 
-        history.push({ pathname: '/search', search: `?term=${keyword}`, })
+        history.push({ pathname: '/search', search: `?term=${summonerName}`, })
     }
 
     return (
-        <header className="bg-azure h-20 p-30 items-center flex justify-between">
+        <header className="bg-azure h-px97 p-30 items-center flex justify-between text-xs">
             <div className="ml-5">
                 <Link to="/" >
                     <img alt="OP.GG" height="16" src="//opgg-static.akamaized.net/images/gnb/svg/00-opgglogo.svg" width="65" />
                 </Link>
             </div>
+            <OutsideClickHandler onOutsideClick={() => setIsFocus(false)}>
+                <div className="relative mr-5">
+                    <input
+                        autoComplete="off"
+                        className="pr-16 w-px260 h-px32 focus:ring-2 focus:ring-blue-600 focus:ring-opacity-90 focus:outline-none py-3 px-5 rounded-sm pl-px14 pt-px9 pr-px42 pb-px8"
+                        type="text"
+                        placeholder="소환사명,챔피언..."
+                        name="search"
+                        onChange={onKeyDownHandler}
+                        onKeyPress={e => {
+                            if (e.key === 'Enter') {
+                                onSubmit(e, '')
+                            }
+                        }}
+                        onFocus={e => setIsFocus(true)}
+                    />
+                    <button className="absolute right-2 top-0 w-8 h-8" onClick={onSubmit}>
+                        <img height="14" src="//opgg-static.akamaized.net/images/gnb/svg/00-icon-gg.svg" alt="" />
+                    </button>
 
-            <div>
-                <input
-                    autoComplete="off"
-                    className="pr-16 w-80 mr-5 focus:ring-2 focus:ring-blue-600 focus:ring-opacity-90 focus:outline-none py-3 px-5 rounded-sm"
-                    type="text"
-                    placeholder="소환사명,챔피언..."
-                    name="search"
-                    onChange={onKeyDownHandler}
-                    onKeyPress={e => {
-                        if (e.key === 'Enter') {
-                            onSubmit()
-                        }
-                    }}
-                    onFocus={e => setIsFocus(true)}
-                // onBlur={e => {
-                //     console.log(e.target)
-                //     setIsFocus(false)
-                // }}
-                />
-                <button className="absolute right-7 top-5 w-10 h-10" onClick={onSubmit}>
-                    <img height="14" src="//opgg-static.akamaized.net/images/gnb/svg/00-icon-gg.svg" alt="" />
-                </button>
-                < div className={`absolute flex flex-col z-50 w-80 bg-white shadow-lg mt-1 ${!(isFocus && keyword) ? "hidden" : ""}`} >
-                    <div className="flex flex-col text-center">
-                        {isLoading || !data ? <p>Loading...</p> :
-                            data[0].groups[0].items.map((item: any, index: number) =>
-                                <div onClick={onSubmit}>
-                                    <MostChampion key={index} champions={item} />
-                                </div>)}
-                    </div>
-                </div>
-                <div className={`absolute flex flex-col z-50 w-80 bg-white shadow-lg mt-1 ${(isFocus && !keyword) ? "" : "hidden"}`} >
-                    <div className="grid justify-items-stretch text-center grid-flow-col border-collapse">
-                        <div className={`p-4 border-soloRatingBoxBorder ${tabState === "favorite" && 'border-r border-b bg-championInfoBg text-soloRatingTextGray'}`} data-type="recentSearch" onClick={onTabClick}>
-                            최근검색
-                        </div>
-                        <div className={`p-4 border-soloRatingBoxBorder ${tabState === "recentSearch" && 'border-l border-b bg-championInfoBg text-soloRatingTextGray'}`} data-type="favorite" onClick={onTabClick}>
-                            즐겨찾기
+                    < div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${!(isFocus && keyword) ? "hidden" : ""}`} >
+                        <div className="flex flex-col text-center">
+                            {isLoading || !data ? <p>Loading...</p> :
+                                data[0] && data[0].groups[0].items.map((item: any, index: number) =>
+                                    <div onClick={(e) => onSubmit(e, item.name)}>
+                                        <MostChampion key={index} champions={item} />
+                                    </div>)}
                         </div>
                     </div>
-                    {/* 최근 검색*/}
-                    <div className="flex flex-col text-center">
-                        <div className="tabItem summoner-search-history--recent" >
-                            <div className="RecentSummonerListWrap">
-                                {tabState === "recentSearch" &&
-                                    <div className="flex flex-col m-5">
-                                        {searchList.length === 0 ?
-                                            <div>
-                                                <div className="m-auto my-3">
-                                                    <img className="Image m-auto" width="16" height="16" src="//opgg-static.akamaized.net/images/site/icon-history-info@2x.png" alt="" />
-                                                </div>
-                                                <span className="">
-                                                    최근에 본 소환사가 없습니다.
-                                                </span>
-                                            </div> :
-                                            <div>
-                                                {searchList.map((item: any, i: number) =>
-                                                    <div key={i} className="flex flex-row justify-between m-2 pl-3">
-                                                        <div onClick={onSubmit}>{item}</div>
-                                                        <div className="flex flex-row">
-                                                            <div className="w-5 h-5 bg-center bg-no-repeat top-1Add" style={{ backgroundImage: `url(//opgg-static.akamaized.net/images/site/icon-favorite-off.png)` }}></div>
-                                                            <div className="w-5 h-5 bg-center bg-no-repeat Delete" style={{ backgroundImage: `url(//opgg-static.akamaized.net/images/site/icon-history-delete.png)` }}></div>
-                                                        </div>
+                    <div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${(isFocus && !keyword) ? "" : "hidden"}`} >
+                        <div className="grid justify-items-stretch text-center grid-flow-col border-collapse h-px40 text-tabActiveColor  text-sm">
+                            <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tabState === "favorite" && 'border-r border-b bg-championInfoBg text-soloRatingTextGray text-tabDisableColor bg-tabDisableBg'}`} data-type="recentSearch" onClick={onTabClick}>
+                                최근검색
+                            </div>
+                            <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tabState === "recentSearch" && 'border-l border-b bg-championInfoBg text-soloRatingTextGray text-tabDisableColor bg-tabDisableBg'}`} data-type="favorite" onClick={onTabClick}>
+                                즐겨찾기
+                            </div>
+                        </div>
+                        {/* 최근 검색*/}
+                        <div className="flex flex-col text-center text-recentSearchColor">
+                            <div className="tabItem summoner-search-history--recent" >
+                                <div className="RecentSummonerListWrap">
+                                    {tabState === "recentSearch" &&
+                                        <div className="flex flex-col m-5">
+                                            {searchList.length === 0 ?
+                                                <div>
+                                                    <div className="m-auto my-3">
+                                                        <img className="Image m-auto" width="16" height="16" src="//opgg-static.akamaized.net/images/site/icon-history-info@2x.png" alt="" />
                                                     </div>
-                                                )}
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                                {tabState === "favorite" &&
-                                    <div className="flex flex-col m-5" >
-                                        <div className="m-auto my-3">
-                                            <img className="Image" width="16" height="16" src="//opgg-static.akamaized.net/images/site/icon-history-info@2x.png" alt="" />
+                                                    <span className="">
+                                                        최근에 본 소환사가 없습니다.
+                                                    </span>
+                                                </div> :
+                                                <div>
+                                                    {searchList.map((item: any, i: number) =>
+                                                        <div key={i} className="flex flex-row justify-between my-2">
+                                                            <div className="cursor-pointer" onClick={(e) => onSubmit(e, item)}>{item}</div>
+                                                            <div className="flex flex-row">
+                                                                <div className="w-5 h-5 bg-center bg-no-repeat top-1 cursor-pointer" style={{ backgroundImage: `url(//opgg-static.akamaized.net/images/site/icon-favorite-off.png)` }}></div>
+                                                                <div className="w-5 h-5 bg-center bg-no-repeat cursor-pointer" style={{ backgroundImage: `url(//opgg-static.akamaized.net/images/site/icon-history-delete.png)` }}></div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            }
                                         </div>
-                                        <span>
-                                            관심있는 소환사에 <i className="__spSite __spSite-100"></i> 즐겨찾기를 하여 편리하게 정보를 받아보세요.
-                                        </span>
-                                    </div>}
+                                    }
+                                    {tabState === "favorite" &&
+                                        <div className="flex flex-col m-5" >
+                                            <div className="m-auto my-3">
+                                                <img className="Image" width="16" height="16" src="//opgg-static.akamaized.net/images/site/icon-history-info@2x.png" alt="" />
+                                            </div>
+                                            <span>
+                                                관심있는 소환사에 <i className="__spSite __spSite-100"></i> 즐겨찾기를 하여 편리하게 정보를 받아보세요.
+                                            </span>
+                                        </div>}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </OutsideClickHandler>
         </header >
     );
 };

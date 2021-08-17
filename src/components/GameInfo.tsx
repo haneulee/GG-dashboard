@@ -51,15 +51,15 @@ export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
 
     return (
         <>
-            <div className="w-full m-2 text-soloRatingText text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
+            <div className="w-full m-2 text-tabColor text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
                 <div className="text-center flex flex-row pl-2 h-10 font-bold border-b border-soloRatingBoxBorder ">
-                    <div className={`p-2 ${gameType === "all" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="all" onClick={onTabClick}>
+                    <div className={`p-2 cursor-pointer ${gameType === "all" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="all" onClick={onTabClick}>
                         전체
                     </div>
-                    <div className={`p-2 ${gameType === "solo" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="solo" onClick={onTabClick}>
+                    <div className={`p-2 cursor-pointer ${gameType === "solo" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="solo" onClick={onTabClick}>
                         솔로게임
                     </div>
-                    <div className={`p-2 ${gameType === "free" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="free" onClick={onTabClick}>
+                    <div className={`p-2 cursor-pointer ${gameType === "free" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="free" onClick={onTabClick}>
                         자유랭크
                     </div>
                 </div>

@@ -12,7 +12,7 @@ interface IPositionStatProps {
 
 export const PositionStat: React.FC<IPositionStatProps> = ({ positions }) => {
     return (
-        <div className="flex flex-row w-full text-soloRatingText text-sm ">
+        <div className="flex flex-row w-full text-recentSearchColor text-sm ">
             <div className="flex flex-row">
                 <div className="p-2 flex flex-col">
                     <div className="p-3">
@@ -33,13 +33,13 @@ export const PositionStat: React.FC<IPositionStatProps> = ({ positions }) => {
                                         <img src={`/images/${ImgName}`} width="37" alt={position?.positionName} />
                                     </div>
                                     <div className="p-2 flex flex-col">
-                                        <div className="text-soloRatingTextGray font-bold text-left" title={position?.positionName}>
+                                        <div className="text-positionColor font-bold text-left" title={position?.positionName}>
                                             {position?.positionName}
                                         </div>
-                                        <div>
+                                        <div className="text-xs ">
                                             <span className="text-soloRatingTextBlue">70% </span>
                                             <span> | </span>
-                                            <span className="text-xs text-gameAvgYellow" title="최고 CS (CS/분)">
+                                            <span className="text-gameAvgYellow" title="최고 CS (CS/분)">
                                                 승률 <b>{winPct}</b>%
                                             </span>
                                         </div>
