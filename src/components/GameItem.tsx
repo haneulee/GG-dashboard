@@ -95,7 +95,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
                             <img key={i} src={peakItem} className="rounded-md w-6 h-6" alt="" />)}
                     </div>
                 </div>
-                <div className="pt-2">
+                <div className="pt-2 truncate w-px97">
                     {game?.summonerName}
                 </div>
             </div>

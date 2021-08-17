@@ -2,7 +2,6 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import React, { useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import { Link, useHistory } from "react-router-dom";
-import { MostChampion } from "./MostChampion";
 import { useQuery } from 'react-query';
 
 export const Header: React.FC = () => {
@@ -11,11 +10,9 @@ export const Header: React.FC = () => {
     const [keyword, setKeyword] = useState('');
     const [isFocus, setIsFocus] = useState(false);
     const searchList = JSON.parse(localStorage.getItem('keywords') || '[]');
-    const { isLoading, data, refetch } = useQuery('search', () =>
-        fetch(
-            // `https://www.op.gg/ajax/autocomplete.json/keyword=${keyword}`
-            `https://codingtest.op.gg/api/summoner/${keyword}`
-        ).then((res) => res.json())
+    const { isLoading, error, data, refetch } = useQuery('search', () => fetch(
+        `https://codingtest.op.gg/api/summoner/${keyword}`
+    ).then((res) => res.json())
     );
 
     const onTabClick = (e: any) => {
@@ -40,18 +37,15 @@ export const Header: React.FC = () => {
     }, [debouncedSearchTerm]);
 
     const onKeyDownHandler = (e: any) => {
-        console.log("key down =====> ", e.target.value, e.keyCode)
         setKeyword(e.target.value);
     }
 
     const onSubmit = (e: any, name?: string) => {
-        console.log("submit =====> ", keyword, name)
         setIsFocus(false);
         if (!(name || keyword)) return;
 
         const summonerName = name || keyword;
         const keywordList = JSON.parse(localStorage.getItem('keywords') || '[]')
-        console.log(summonerName, keywordList);
 
         if (keywordList.indexOf(summonerName) === -1) {
             localStorage.setItem('keywords', JSON.stringify(keywordList.concat(summonerName)))
@@ -90,10 +84,26 @@ export const Header: React.FC = () => {
                     < div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${!(isFocus && keyword) ? "hidden" : ""}`} >
                         <div className="flex flex-col text-center">
                             {isLoading || !data ? <p>Loading...</p> :
-                                data[0] && data[0].groups[0].items.map((item: any, index: number) =>
-                                    <div onClick={(e) => onSubmit(e, item.name)}>
-                                        <MostChampion key={index} champions={item} />
-                                    </div>)}
+                                <div onClick={(e) => onSubmit(e, data.summoner.name)} className="cursor-pointer flex flex-row text-center text-xs">
+                                    <div className="pl-3 py-2" title={data.summoner?.name}>
+                                        <img src={data.summoner?.profileImageUrl} width="40" className="rounded-full" alt={data.summoner?.name} />
+                                    </div>
+                                    <div className="p-2 flex flex-col text-left">
+                                        <div className="text-recentSearchColor font-bold text-base truncate w-px200" title={data.summoner?.name}>
+                                            {data.summoner?.name}
+                                        </div>
+                                        <div>
+                                            <span >
+                                                {data.summoner?.leagues[0].tierRank.tier}
+                                            </span>
+                                            <span> - </span>
+                                            <span>
+                                                {data.summoner?.leagues[0].tierRank.lp} LP
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${(isFocus && !keyword) ? "" : "hidden"}`} >
@@ -123,7 +133,7 @@ export const Header: React.FC = () => {
                                                 <div>
                                                     {searchList.map((item: any, i: number) =>
                                                         <div key={i} className="flex flex-row justify-between my-2">
-                                                            <div className="cursor-pointer" onClick={(e) => onSubmit(e, item)}>{item}</div>
+                                                            <div className="cursor-pointer text-left truncate w-px141" onClick={(e) => onSubmit(e, item)}>{item}</div>
                                                             <div className="flex flex-row">
                                                                 <div className="w-5 h-5 bg-center bg-no-repeat top-1 cursor-pointer" style={{ backgroundImage: `url(//opgg-static.akamaized.net/images/site/icon-favorite-off.png)` }}></div>
                                                                 <div className="w-5 h-5 bg-center bg-no-repeat cursor-pointer" style={{ backgroundImage: `url(//opgg-static.akamaized.net/images/site/icon-history-delete.png)` }}></div>

@@ -19,7 +19,6 @@ interface ISoloRatingProps {
 }
 
 export const SoloRating: React.FC<ISoloRatingProps> = ({ leagueInfo }) => {
-    console.log(leagueInfo);
     const winPercentage = (leagueInfo?.wins || 0) / (leagueInfo?.wins || 1 + (leagueInfo?.losses || 1)) * 100;
     const totalGameCount = (leagueInfo?.wins || 0) + (leagueInfo?.losses || 0);
     return (
