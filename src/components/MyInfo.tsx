@@ -1,19 +1,22 @@
 import React from "react";
 
 interface IMyInfoProps {
-    summoner?: {
-        name?: string;
-        level?: number;
-        ladderRank?: {
-            rank?: number;
-            rankPercentOfTop?: number;
+    data?: {
+        summoner?: {
+            name?: string;
+            level?: number;
+            ladderRank?: {
+                rank?: number;
+                rankPercentOfTop?: number;
+            }
+            profileImageUrl?: string;
+            profileBorderImageUrl?: string;
         }
-        profileImageUrl?: string;
-        profileBorderImageUrl?: string;
     }
 }
 
-export const MyInfo: React.FC<IMyInfoProps> = ({ summoner }) => {
+export const MyInfo: React.FC<IMyInfoProps> = ({ data }) => {
+    const summoner = data?.summoner;
 
     return (
         <div className="w-px990 h-60 flex flex-col m-auto text-gray-500">

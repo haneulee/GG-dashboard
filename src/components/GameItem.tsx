@@ -1,5 +1,4 @@
-import React from 'react'
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from 'react'
 import { convertSeconds, timeSince } from "../util/utility";
 import { TeamPlayer } from "./TeamPlayer";
 import { Tooltip } from "./Tooltip";
@@ -43,20 +42,11 @@ interface IGameItemProps {
         summonerId: string;
         summonerName: string;
         tierRankShort: string;
-    },
-    summonerId: string;
+        teams: [];
+    }
 }
 
-export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
-    const { isLoading, error, data } = useQuery('summoner_matchDetail', () => fetch(
-        `https://codingtest.op.gg/api/summoner/${summonerId}/matchDetail/${game.gameId}`
-    ).then((res) => res.json())
-    );
-
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error!</p>;
-
-    const { teams } = data;
+export const GameItem: React.FC<IGameItemProps> = ({ game }) => {
 
     const renderNoImg = (count: number) => {
         const result = [];
@@ -147,7 +137,7 @@ export const GameItem: React.FC<IGameItemProps> = ({ game, summonerId }) => {
                     <span className="wards vision">제어 와드 {game.stats.ward.visionWardsBought}</span></div>
             </div>
             <div className="p-1 self-center flex flex-row">
-                {teams.map((team: { players: any[]; }, i: number) =>
+                {game.teams.map((team: { players: any[]; }, i: number) =>
                     <div key={i} className="Team flex flex-col">
                         {team.players.map((player, j) => <TeamPlayer key={j} player={player} />)}
                     </div>)}
