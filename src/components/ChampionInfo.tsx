@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import api from "../util/APIUtil";
+import styled from "@emotion/styled"
 import { ChampionRank } from "./ChampionRank";
 import { WeekRank } from "./WeekRank";
-import Loading from "../lottie/lottie-loading.json"
-import Lottie from 'react-lottie';
 
 interface IChampionInfoProps {
     summonerId: string;
@@ -15,24 +15,28 @@ interface IDataProps {
 
 export const ChampionInfo: React.FC<IChampionInfoProps> = ({ summonerId }) => {
     const [tab, setTab] = useState('champion');
-    const [loading, setLoading] = useState(false);
     const [{ champions, recentWinRate }, setData] = useState<IDataProps>({} as IDataProps);
 
-    useEffect(() => {
+    const getData = useCallback(async () => {
         if (!summonerId) return;
-        setLoading(true);
-        fetch(`https://codingtest.op.gg/api/summoner/${summonerId}/mostInfo`)
-            .then(res => res.json())
-            .then(res => {
-                if (res) {
-                    setData(res)
-                    setLoading(false);
-                }
-            });
-    }, [summonerId]);
+        try {
+            const res = await api.fetchMostInfo(summonerId);
+            if (res) {
+                setData(res);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, [summonerId])
 
-    const onTabClick = (target: string) => {
-        if (target === 'champion') {
+    useEffect(() => {
+        getData();
+    }, [getData]);
+
+    const onTabClick = (e: React.MouseEvent) => {
+        const { id } = e.target as HTMLDivElement;
+
+        if (id === 'champion') {
             if (tab !== "champion") {
                 setTab('champion');
             }
@@ -43,27 +47,41 @@ export const ChampionInfo: React.FC<IChampionInfoProps> = ({ summonerId }) => {
         }
     }
 
+    const renderTabContents = () => {
+        let data;
+
+        if (tab === 'champion') {
+            data = champions?.sort((a: any, b: any) => { return b.games - a.games; });
+            return data?.map((champion: any, id: number) => <ChampionRank key={id} champion={champion} />)
+        } else if (tab === 'recent') {
+            data = recentWinRate?.sort((a: any, b: any) => { return (b.wins + b.losses) - (a.wins + a.losses); });
+            return data?.map((recentWin: any, id: number) => <WeekRank key={id} recentWin={recentWin} />)
+        }
+    }
+
     return (
-        <div className="w-full h-auto m-2 text-soloRatingText text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
-            {loading ? <Lottie
-                options={{ animationData: Loading }}
-                style={{ width: '100%', height: '100%' }}
-            /> :
-                <>
-                    <div className="grid grid-cols-2 text-center border-collapse h-10">
-                        <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tab === 'champion' && 'bg-championInfoBg text-soloRatingTextGray border-r'} ${tab === 'recent' ? 'border-b' : ''}`} onClick={() => onTabClick('champion')}>
-                            챔피언 승률
-                        </div>
-                        <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tab === 'recent' && 'bg-championInfoBg text-soloRatingTextGray border-l'} ${tab === 'champion' ? 'border-b' : ''}`} onClick={() => onTabClick('recent')}>
-                            7일간 랭크 승률
-                        </div>
-                    </div>
-                    <div className="flex flex-col">
-                        {tab === 'champion' && champions?.sort((a: any, b: any) => { return b.games - a.games; }).map((champion: any, id: number) => <ChampionRank key={id} champion={champion} />)}
-                        {tab === 'recent' && recentWinRate?.sort((a: any, b: any) => { return (b.wins + b.losses) - (a.wins + a.losses); }).map((recentWin: any, id: number) => <WeekRank key={id} recentWin={recentWin} />)}
-                    </div>
-                </>
-            }
-        </div>
+        <ChampionWrapper>
+            <div className="grid grid-cols-2 text-center border-collapse h-10">
+                <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tab === 'champion' && 'bg-championInfoBg text-soloRatingTextGray border-r'} ${tab === 'recent' ? 'border-b' : ''}`} id='champion' onClick={onTabClick}>
+                    챔피언 승률
+                </div>
+                <div className={`pt-2 border-soloRatingBoxBorder cursor-pointer ${tab === 'recent' && 'bg-championInfoBg text-soloRatingTextGray border-l'} ${tab === 'champion' ? 'border-b' : ''}`} id='recent' onClick={onTabClick}>
+                    7일간 랭크 승률
+                </div>
+            </div>
+            <div className="flex flex-col">
+                {renderTabContents()}
+            </div>
+        </ChampionWrapper>
     )
 };
+
+const ChampionWrapper = styled.div`
+    width: 100%;
+    height: auto;
+    margin: 0.5rem;
+    color: #879292;
+    background-color: #f2f2f2;
+    border: 1px solid #cdd2d2;
+    font-size: small;
+`;

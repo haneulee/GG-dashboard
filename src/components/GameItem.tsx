@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { convertSeconds, timeSince } from "../util/utility";
 import { TeamPlayer } from "./TeamPlayer";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./common/Tooltip";
 
 interface IGameItemProps {
     game: {

@@ -78,7 +78,7 @@ export const Header: React.FC = () => {
         setIsFocus(false);
         setKeyword('');
         setSearchData({});
-        (document.activeElement as HTMLElement).blur();
+        // (document.activeElement as HTMLElement).blur();
     }
 
     return (
@@ -88,7 +88,7 @@ export const Header: React.FC = () => {
                     <img alt="OP.GG" height="16" src="//opgg-static.akamaized.net/images/gnb/svg/00-opgglogo.svg" width="65" />
                 </Link>
             </div>
-            <OutsideClickHandler onOutsideClick={() => reset()}>
+            <OutsideClickHandler onOutsideClick={reset}>
                 <div className="relative mr-5">
                     <input
                         autoComplete="off"
