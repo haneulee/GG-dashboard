@@ -61,4 +61,65 @@ export type Position = {
 
 export type Game = {
   gameId: number;
+  champion: {
+    imageUrl: string;
+    level: number;
+  };
+  createDate: number;
+  gameId: string;
+  gameLength: number;
+  gameType: string;
+  isWin: false;
+  items: ITEM[];
+  mapInfo: null;
+  mmr: number;
+  needRenew: false;
+  peak: [string];
+  spells: SPELL[];
+  stats: STAT;
+  summonerId: string;
+  summonerName: string;
+  tierRankShort: string;
+  teams: TEAM[];
+};
+
+export type STAT = {
+  general: {
+    assist: number;
+    contributionForKillRate: string;
+    cs: number;
+    csPerMin: number;
+    death: number;
+    goldEarned: number;
+    kdaString: string;
+    kill: number;
+    largestMultiKillString: string;
+    opScoreBadge: string;
+    totalDamageDealtToChampions: number;
+  };
+  ward: {
+    sightWardsBought: number;
+    visionWardsBought: number;
+  };
+};
+
+export type ITEM = {
+  imageUrl: string;
+};
+
+export type SPELL = {
+  imageUrl: string;
+};
+
+export type TEAM = {
+  players: PLAYER[];
+};
+
+export type PLAYER = {
+  champion: {
+    imageUrl: string;
+    level: number;
+  };
+  summonerId: string;
+  summonerName: string;
 };

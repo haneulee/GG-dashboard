@@ -54,6 +54,7 @@ const GameInfoWrapper = styled.div`
     width: 100%;
     height: auto;
     margin: 0.5rem;
+    width: 700px;
     color: #555555;
     background-color: #f2f2f2;
     border: 1px solid #cdd2d2;

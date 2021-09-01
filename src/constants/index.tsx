@@ -26,6 +26,14 @@ const constants = {
     WIN_PCT: '승률',
     GAME_SOLO_RANK: '솔랭',
     GAME_FREE_RANK: '자유 5:5 랭크',
+    TOOLTIP_MSG: '평점은 0~10점을 기준으로 경기에 기여한 정도에 따라 차등 부여되며 탈주 등 패배에 결정적인 영향을 끼친 경우 0점에 가까운 점수가 부여됩니다.',
+    POINT: '평점',
+    WIN: '승리',
+    LOSE: '패배',
+    LEVEL: '레벨',
+    KILL: '킬관여',
+    AVERAGE: '매치 평균'
+
 }
 
 

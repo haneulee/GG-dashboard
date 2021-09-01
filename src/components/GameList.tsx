@@ -18,6 +18,7 @@ export const GameList: FC<Props> = memo(({ games = [], summonerId, gameType }) =
         try {
             const tempArr = [];
 
+            //TODO: GameItem에서 호출해야 하는지 아니면 한꺼번에 호출한다음에 저장하는지?
             for (let index = 0; index < games.length; index++) {
                 const game = games[index]
                 const res = await api.fetchMatchDetail(summonerId, String(game.gameId));

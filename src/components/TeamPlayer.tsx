@@ -1,23 +1,17 @@
-import React from "react";
+import React, { FC } from "react";
+import { PLAYER } from "src/types";
 
-interface ITeamPlayerProps {
-    player: {
-        champion: {
-            imageUrl: string;
-            level: number;
-        }
-        summonerId: string;
-        summonerName: string;
-    }
+interface Props {
+    player: PLAYER;
 }
 
-export const TeamPlayer: React.FC<ITeamPlayerProps> = ({ player }) => {
+export const TeamPlayer: FC<Props> = ({ player }) => {
     return (
-        <div className="Summoner flex flex-row ml-1 pb-0.5 " style={{ width: "70px" }}>
-            <div className="ChampionImage min-w-max pr-1">
+        <div className="flex flex-row ml-1 pb-0.5 " style={{ width: "70px" }}>
+            <div className="min-w-max pr-1">
                 <img src={player.champion.imageUrl} alt="" width="16px" height="16px" />
             </div>
-            <div className="SummonerName truncate" style={{ maxWidth: "52px" }}>
+            <div className="truncate" style={{ maxWidth: "52px" }}>
                 {player.summonerName}
             </div>
         </div >
