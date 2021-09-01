@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import Lottie from 'react-lottie';
 import Loading from "../lottie/lottie-loading.json"
+import api from "../util/APIUtil";
 import { GameItem } from "./GameItem";
 
 interface IGameListProps {
@@ -9,39 +10,53 @@ interface IGameListProps {
     gameType: string;
 }
 
-export const GameList: React.FC<IGameListProps> = ({ games = [], summonerId, gameType }) => {
+export const GameList: React.FC<IGameListProps> = memo(({ games = [], summonerId, gameType }) => {
     const [loading, setLoading] = useState(false);
     const [gameArr, setGameArr] = useState<any>([]);
 
-    const getGameData = async () => {
-        setLoading(true);
-        const tempArr = [];
+    const getGameData = useCallback(async () => {
+        if (!games) return;
+        try {
+            const tempArr = [];
+            setLoading(true);
 
-        for (let index = 0; index < games.length; index++) {
-            const game = games[index]
-            const res = await fetch(`https://codingtest.op.gg/api/summoner/${summonerId}/matchDetail/${game.gameId}`);
-            const body = await res.json();
-            tempArr.push({ ...game, ...body });
+            for (let index = 0; index < games.length; index++) {
+                const game = games[index]
+                const res = await api.fetchMatchDetail(summonerId, game.gameId);
+                tempArr.push({ ...game, ...res });
+            }
+
+            setGameArr(tempArr);
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
         }
-
-        setGameArr(tempArr);
-        setLoading(false);
-    }
+    }, [summonerId, games])
 
     useEffect(() => {
-        if (games) {
-            getGameData()
+        getGameData()
+    }, [getGameData])
+
+    const renderGameList = () => {
+        let data;
+
+        if (gameType === 'all') {
+            data = gameArr;
+        } else if (gameType === 'solo') {
+            data = gameArr.filter((game: any) => game.gameType === '솔랭');
+        } else {
+            data = gameArr.filter((game: any) => game.gameType === '자유 5:5 랭크');
         }
-    }, [])
+
+        return data.map((game: any) => <GameItem key={game.gameId} game={game} />)
+    }
 
     return (
         <div className='GameItem'>
             {loading ? <Lottie
                 options={{ animationData: Loading }}
-            /> :
-                <>
-                    {(gameType === 'all' ? gameArr : gameType === 'solo' ? gameArr.filter((game: any) => game.gameType === '솔랭') : gameArr.filter((game: any) => game.gameType === '자유 5:5 랭크')).map((game: any) => <GameItem key={game.gameId} game={game} />)}
-                </>}
+                style={{ width: '100%', height: '100%' }}
+            /> : renderGameList()}
         </div>
     )
-};
+});

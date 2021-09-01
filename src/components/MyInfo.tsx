@@ -20,7 +20,7 @@ export const MyInfo: React.FC<IMyInfoProps> = ({ data }) => {
 
     return (
         <div className="w-px990 h-60 flex flex-col m-auto text-gray-500">
-            <div className="flex flex-row p-5 text-xs ">
+            <div className="flex flex-row px-2 py-5 text-xs ">
                 <span className="p-1 mr-3 rounded-md bg-lankGray text-lankTextGray border-2 border-lankBorderGray" title="">
                     <b>S9</b> Silver</span>
                 <span className="p-1 mr-3 rounded-md bg-lankGray text-lankTextGray border-2 border-lankBorderGray" title="Gold 4 0LP">

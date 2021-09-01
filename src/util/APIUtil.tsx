@@ -31,7 +31,8 @@ const fetchData = async (url: string) => {
 const api = {
     fetchSummoner: (keyword: string) => fetchData(`${API_ENDPOINT}/summoner/${keyword}`),
     fetchMostInfo: (summonerId: string) => fetchData(`${API_ENDPOINT}/summoner/${summonerId}/mostInfo`),
-
+    fetchMatches: (summonerId: string) => fetchData(`${API_ENDPOINT}/summoner/${summonerId}/matches`),
+    fetchMatchDetail: (summonerId: string, gameId: string) => fetchData(`${API_ENDPOINT}/summoner/${summonerId}/matchDetail/${gameId}`),
 };
 
 export default api;

@@ -1,9 +1,10 @@
 import OutsideClickHandler from 'react-outside-click-handler';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import { Link, useHistory } from "react-router-dom";
 import Loading from "../lottie/lottie-loading.json"
 import Lottie from 'react-lottie';
+import api from '../util/APIUtil';
 
 interface SummonerProps {
     summoner?: {
@@ -26,7 +27,7 @@ export const Header: React.FC = () => {
     const [searchData, setSearchData] = useState<SummonerProps>();
     const [isFocus, setIsFocus] = useState(false);
     const searchList = JSON.parse(localStorage.getItem('keywords') || '[]');
-
+    const debouncedSearchTerm = useDebounce(keyword, 1000);
 
     const onTabClick = (e: any) => {
         const { target } = e;
@@ -37,24 +38,23 @@ export const Header: React.FC = () => {
         }
     }
 
-    const debouncedSearchTerm = useDebounce(keyword, 1000);
-
-    const searchItems = async (search: string) => {
+    const searchItems = useCallback(async (search: string) => {
         if (!search) return;
-        setLoading(true);
-        fetch(`https://codingtest.op.gg/api/summoner/${search}`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.summoner) {
-                    setSearchData(res)
-                    setLoading(false);
-                }
-            });
-    };
+        try {
+            setLoading(true);
+            const res = await api.fetchSummoner(search);
+            if (res) {
+                setSearchData(res);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, [])
 
     useEffect(() => {
         searchItems(debouncedSearchTerm);
-    }, [debouncedSearchTerm]);
+    }, [searchItems, debouncedSearchTerm]);
 
     const onKeyDownHandler = (e: any) => {
         setKeyword(e.target.value);
@@ -78,7 +78,6 @@ export const Header: React.FC = () => {
         setIsFocus(false);
         setKeyword('');
         setSearchData({});
-        // (document.activeElement as HTMLElement).blur();
     }
 
     return (
@@ -109,7 +108,7 @@ export const Header: React.FC = () => {
                         <img height="14" src="//opgg-static.akamaized.net/images/gnb/svg/00-icon-gg.svg" alt="" />
                     </button>
 
-                    < div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${!(isFocus && searchData) ? "hidden" : ""}`} >
+                    < div className={`absolute flex flex-col z-50 w-full bg-white shadow-lg mt-1 ${!(isFocus && searchData?.summoner) ? "hidden" : ""}`} >
                         <div className="flex flex-col text-center">
                             {loading || !searchData ?
                                 <Lottie

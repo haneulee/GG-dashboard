@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { convertSeconds, timeSince } from "../util/utility";
 import { TeamPlayer } from "./TeamPlayer";
 import { Tooltip } from "./common/Tooltip";
