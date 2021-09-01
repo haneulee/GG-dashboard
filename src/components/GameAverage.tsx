@@ -1,21 +1,16 @@
-import React from "react";
+import React, { FC } from "react";
+import { Summary } from "src/types";
 
-interface IGameAverageProps {
-    summary?: {
-        kills: number;
-        assists: number;
-        deaths: number;
-        wins: number;
-        losses: number;
-    }
+interface Props {
+    summary: Summary;
 }
 
-export const GameAverage: React.FC<IGameAverageProps> = ({ summary }) => {
-    const games = (summary?.wins || 0) + (summary?.losses || 0);
-    const kills = summary?.kills || 1;
-    const assists = summary?.assists || 1;
-    const deaths = summary?.deaths || 1;
-    const wins = summary?.wins || 1;
+export const GameAverage: FC<Props> = ({ summary }) => {
+    const games = summary.wins + summary.losses;
+    const kills = summary.kills;
+    const assists = summary.assists;
+    const deaths = summary.deaths;
+    const wins = summary.wins;
 
     const kda = Math.round((kills + assists) / deaths);
     const winPct = Math.round((wins / games) * 100);
@@ -24,31 +19,33 @@ export const GameAverage: React.FC<IGameAverageProps> = ({ summary }) => {
     const kdaColor = kda >= 5 ? "text-gameAvgYellow" : kda >= 4 ? "text-kdaBlue" : kda >= 3 ? "text-kdaGreen" : "text-soloRatingTextGra";
 
     return (
-        <div className="flex flex-row w-full text-recentSearchColor text-sm border-r border-soloRatingBoxBorder">
+        <div className="flex flex-row w-full text-sm text-recentSearchColor border-r border-soloRatingBoxBorder">
             <div className="flex flex-row">
                 <div className="p-2 flex flex-col text-center self-center">
-                    <div className="WinRatioTitle">
+                    <div>
                         <span className="total">{games}</span>전
-                        <span className="win"> {summary?.wins}</span>승
-                        <span className="lose"> {summary?.losses}</span>패
+                        <span className="win"> {wins}</span>승
+                        <span className="lose"> {summary.losses}</span>패
                     </div>
                     <div className="text-xs w-28 h-28">
                         <div className="relative inline-block rounded-full w-24 h-24 mt-2" style={{ background: `conic-gradient(#1f8ecd 0% ${winPct}%, #c6443e ${winPct}% 100%` }}>
-                            <span className="absolute rounded-full text-base text-soloRatingTextGray bg-soloRatingBoxBackground w-16 h-16 top-4 left-4 pt-5"><b>{winPct}</b>%</span>
+                            <span className="winPct"><b>{winPct}</b>%</span>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col text-center self-center">
                     <div className="text-xs font-bold">
-                        <span className="Kill">{summary?.kills}</span>
+                        <span>{kills}</span>
                         <span> / </span>
-                        <span className="Death">{summary?.assists}</span>
+                        <span>{assists}</span>
                         <span> / </span>
-                        <span className="Assist">{summary?.deaths}</span>
+                        <span>{deaths}</span>
                     </div>
                     <div className="text-base">
                         <span className={`${kdaColor} font-bold`}>{kda}:1 </span>
-                        <span className={`${killPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'}`} title="">(<span>{killPct}%</span>)</span>
+                        <span className={`${killPct >= 60 ? 'text-loseGraphBorder' : 'text-soloRatingTextGray'}`}>
+                            ({killPct}%)
+                        </span>
                     </div>
                 </div>
             </div>

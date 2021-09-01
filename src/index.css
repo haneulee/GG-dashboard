@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
+
+.badge {
+  @apply p-1 mr-3 rounded-md bg-lankGray text-lankTextGray border-2 border-lankBorderGray;
+}
+.level {
+  @apply text-lankTextYellow absolute w-11 left-10 bottom-1 pl-3 box-border;
+}
+.rating {
+  @apply flex flex-row w-full h-auto p-5 m-2 text-soloRatingText text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder;
+}
+.winPct {
+  @apply absolute rounded-full text-base w-16 h-16 top-4 left-4 pt-5 text-soloRatingTextGray bg-soloRatingBoxBackground;
+}
+
 @tailwind utilities;

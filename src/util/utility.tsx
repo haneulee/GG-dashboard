@@ -1,26 +1,39 @@
-type DateType = Date | string | number;
+import constants from "src/constants";
+import { DateType } from "src/types";
 
 export const timeSince = (fromDate: DateType = Date.now()) => {
-    const seconds = +Date.now().toString().substr(0, 10) - +new Date(fromDate);
+    const seconds = +Date.now().toString().substring(0, 10) - +new Date(fromDate);
 
-    if (seconds < 60) return `방금 전`
-    const minutes = seconds / 60
-    if (minutes < 60) return `${Math.floor(minutes)}분 전`
-    const hours = minutes / 60
-    if (hours < 24) return `${Math.floor(hours)}시간 전`
-    const days = hours / 24
-    if (days < 7) return `${Math.floor(days)}일 전`
-    const weeks = days / 7
-    if (weeks < 5) return `${Math.floor(weeks)}주 전`
-    const months = days / 30
-    if (months < 12) return `${Math.floor(months)}개월 전`
-    const years = days / 365
+    if (seconds < constants.TIME_MINUTE_HOUR) {
+        return `방금 전`
+    }
+    const minutes = seconds / constants.TIME_MINUTE_HOUR
+    if (minutes < constants.TIME_MINUTE_HOUR) {
+        return `${Math.floor(minutes)}분 전`
+    }
+    const hours = minutes / constants.TIME_MINUTE_HOUR
+    if (hours < constants.TIME_DAY_HOUR) {
+        return `${Math.floor(hours)}시간 전`
+    }
+    const days = hours / constants.TIME_DAY_HOUR
+    if (days < constants.TIME_WEEK_DAY) {
+        return `${Math.floor(days)}일 전`
+    }
+    const weeks = days / constants.TIME_WEEK_DAY
+    if (weeks < constants.TIME_MONTH_WEEK) {
+        return `${Math.floor(weeks)}주 전`
+    }
+    const months = days / constants.TIME_MONTH_DAY
+    if (months < constants.TIME_YEAR_MONTH) {
+        return `${Math.floor(months)}개월 전`
+    }
+    const years = days / constants.TIME_YEAR_DAY
 
     return `${Math.floor(years)}년 전`
 }
 
 export const convertSeconds = (s: number) => {
-    const min = Math.floor(s / 60);
-    const sec = s % 60;
+    const min = Math.floor(s / constants.TIME_MINUTE_HOUR);
+    const sec = s % constants.TIME_MINUTE_HOUR;
     return min + '분 ' + sec + '초';
 }

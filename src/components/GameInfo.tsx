@@ -1,38 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import styled from "styled-components";
-import api from "../util/APIUtil";
-import { GameAverage } from "./GameAverage";
-import { GameList } from "./GameList";
-import { MostChampion } from "./MostChampion";
-import { PositionStat } from "./PositionStat";
+import useMatches from "src/hooks/useMatches";
+import { GameAverage } from "src/components/GameAverage";
+import { GameList } from "src/components/GameList";
+import { MostChampion } from "src/components/MostChampion";
+import { PositionStat } from "src/components/PositionStat";
+import constants from "src/constants";
 
-interface IGameInfoProps {
+interface Props {
     summonerId: string;
 }
 
-export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
-    const [gameType, setGameType] = useState('all');
-    const [{ games, champions, summary, positions }, setData] = useState<any>({});
+export const GameInfo: FC<Props> = ({ summonerId }) => {
+    const [gameType, setGameType] = useState(constants.GAME_TAB_ALL);
+    const { data } = useMatches(summonerId);
+    const { games, champions, summary, positions } = data;
 
-    const getData = useCallback(async () => {
-        if (!summonerId) return;
-        try {
-            const res = await api.fetchMatches(summonerId);
-            if (res) {
-                setData(res);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }, [summonerId])
-
-    useEffect(() => {
-        getData();
-    }, [getData]);
-
-    const onTabClick = (e: any) => {
-        const { target } = e;
-        const targetType = target.getAttribute('data-type')
+    const onTabClick = (e: React.MouseEvent) => {
+        const targetEl = e.target as HTMLDivElement;
+        const targetType = targetEl.getAttribute('data-type') || '';
 
         if (targetType !== gameType) {
             setGameType(targetType);
@@ -43,14 +29,14 @@ export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
         <>
             <GameInfoWrapper>
                 <TabArea>
-                    <div className={`p-2 cursor-pointer ${gameType === "all" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="all" onClick={onTabClick}>
-                        전체
+                    <div className={`p-2 cursor-pointer ${gameType === constants.GAME_TAB_ALL ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type={constants.GAME_TAB_ALL} onClick={onTabClick}>
+                        {constants.GAME_TAB_ALL_TITLE}
                     </div>
-                    <div className={`p-2 cursor-pointer ${gameType === "solo" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="solo" onClick={onTabClick}>
-                        솔로게임
+                    <div className={`p-2 cursor-pointer ${gameType === constants.GAME_TAB_SOLO ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type={constants.GAME_TAB_SOLO} onClick={onTabClick}>
+                        {constants.GAME_TAB_SOLO_TITLE}
                     </div>
-                    <div className={`p-2 cursor-pointer ${gameType === "free" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="free" onClick={onTabClick}>
-                        자유랭크
+                    <div className={`p-2 cursor-pointer ${gameType === constants.GAME_TAB_FREE ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type={constants.GAME_TAB_FREE} onClick={onTabClick}>
+                        {constants.GAME_TAB_FREE_TITLE}
                     </div>
                 </TabArea>
                 <div className="flex flex-row bg-championInfoBg">
@@ -59,7 +45,7 @@ export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
                     <PositionStat positions={positions} />
                 </div>
             </GameInfoWrapper>
-            {games && <GameList games={games} summonerId={summonerId} gameType={gameType} />}
+            <GameList games={games} summonerId={summonerId} gameType={gameType} />
         </>
     )
 };

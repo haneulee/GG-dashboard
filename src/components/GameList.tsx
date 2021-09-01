@@ -1,33 +1,30 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
-import Lottie from 'react-lottie';
-import Loading from "../lottie/lottie-loading.json"
-import api from "../util/APIUtil";
-import { GameItem } from "./GameItem";
+import React, { FC, memo, useCallback, useEffect, useState } from "react";
+import api from "src/util/APIUtil";
+import constants from "src/constants";
+import { Game } from "src/types";
+import { GameItem } from "src/components/GameItem";
 
-interface IGameListProps {
-    games?: any[];
+interface Props {
+    games: Game[];
     summonerId: string;
     gameType: string;
 }
 
-export const GameList: React.FC<IGameListProps> = memo(({ games = [], summonerId, gameType }) => {
-    const [loading, setLoading] = useState(false);
-    const [gameArr, setGameArr] = useState<any>([]);
+export const GameList: FC<Props> = memo(({ games = [], summonerId, gameType }) => {
+    const [gameArr, setGameArr] = useState<Game[]>([]);
 
     const getGameData = useCallback(async () => {
         if (!games) return;
         try {
             const tempArr = [];
-            setLoading(true);
 
             for (let index = 0; index < games.length; index++) {
                 const game = games[index]
-                const res = await api.fetchMatchDetail(summonerId, game.gameId);
+                const res = await api.fetchMatchDetail(summonerId, String(game.gameId));
                 tempArr.push({ ...game, ...res });
             }
 
             setGameArr(tempArr);
-            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -40,23 +37,20 @@ export const GameList: React.FC<IGameListProps> = memo(({ games = [], summonerId
     const renderGameList = () => {
         let data;
 
-        if (gameType === 'all') {
+        if (gameType === constants.GAME_TAB_ALL) {
             data = gameArr;
-        } else if (gameType === 'solo') {
-            data = gameArr.filter((game: any) => game.gameType === '솔랭');
+        } else if (gameType === constants.GAME_TAB_SOLO) {
+            data = gameArr.filter((game: any) => game.gameType === constants.GAME_SOLO_RANK);
         } else {
-            data = gameArr.filter((game: any) => game.gameType === '자유 5:5 랭크');
+            data = gameArr.filter((game: any) => game.gameType === constants.GAME_FREE_RANK);
         }
 
         return data.map((game: any) => <GameItem key={game.gameId} game={game} />)
     }
 
     return (
-        <div className='GameItem'>
-            {loading ? <Lottie
-                options={{ animationData: Loading }}
-                style={{ width: '100%', height: '100%' }}
-            /> : renderGameList()}
+        <div>
+            {renderGameList()}
         </div>
     )
 });
