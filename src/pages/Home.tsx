@@ -33,8 +33,8 @@ const HomeWrapper = styled.div`
 const WelcomeText = styled.div`
     position: absolute;
     right: 10px;
-    top: 55%;
+    top: 35vw;
     text-align: right;
-    margin: 0 50px;
-    font-size: 3rem;
+    margin: 0 0.5vw;
+    font-size: 4vw;
 `

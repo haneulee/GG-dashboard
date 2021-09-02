@@ -6,17 +6,17 @@ import { SubTier } from "src/components/SubTier";
 import { Summoner } from "src/types";
 
 interface Props {
-    data: Summoner;
+    summoner: Summoner;
     query: string;
 }
 
-export const SubContent: FC<Props> = ({ data, query }) => {
+export const SubContent: FC<Props> = ({ summoner, query }) => {
 
     return (
         <div className="flex flex-row min-w-max max-w-max m-auto">
             <div className="flex flex-col w-px300">
-                <SoloRating data={data} />
-                <SubTier data={data} />
+                <SoloRating summoner={summoner} />
+                <SubTier summoner={summoner} />
                 <ChampionInfo summonerId={query} />
             </div>
             <div className="flex flex-col w-px690 pl-3">

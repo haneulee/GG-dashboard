@@ -6,13 +6,13 @@ import { useLocation } from "react-router-dom";
 export const Summoner = () => {
     const location = useLocation();
     const [_, query] = location.search.split("?term=");
-    const { data } = useSummoner(query);
+    const { data: { summoner } } = useSummoner(query);
 
     return (
         <div className="min-h-max">
-            <MyInfo data={data} />
+            <MyInfo summoner={summoner} />
             <div className="border-layoutBorderColor border" />
-            <SubContent data={data} query={query} />
+            <SubContent summoner={summoner} query={query} />
         </div>
     );
 }

@@ -1,17 +1,15 @@
 export type DateType = Date | string | number;
 
 export type Summoner = {
-  summoner: {
-    name: string;
-    level: number;
-    ladderRank: {
-      rank: number;
-      rankPercentOfTop: number;
-    };
-    profileImageUrl: string;
-    profileBorderImageUrl: string;
-    leagues: League[];
+  name: string;
+  level: number;
+  ladderRank: {
+    rank: number;
+    rankPercentOfTop: number;
   };
+  profileImageUrl: string;
+  profileBorderImageUrl: string;
+  leagues: League[];
 };
 
 export type League = {
@@ -48,6 +46,25 @@ export type Champion = {
   kills: number;
   losses: number;
   name: string;
+  wins: number;
+};
+
+export type ChampionStats = {
+  name: string;
+  cs: number;
+  rank: number;
+  imageUrl: string;
+  games: number;
+  kills: number;
+  assists: number;
+  deaths: number;
+  wins: number;
+};
+
+export type RecentWin = {
+  imageUrl: string;
+  name: string;
+  losses: number;
   wins: number;
 };
 

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Summary } from "src/types";
+import { getKDA, getKDAColor, getKillPct, getWinPct } from "src/util/utility";
 
 interface Props {
     summary: Summary;
@@ -12,11 +13,10 @@ export const GameAverage: FC<Props> = ({ summary }) => {
     const deaths = summary.deaths;
     const wins = summary.wins;
 
-    const kda = Math.round((kills + assists) / deaths);
-    const winPct = Math.round((wins / games) * 100);
-    const killPct = Math.round((kills / assists) * 100);
-
-    const kdaColor = kda >= 5 ? "text-gameAvgYellow" : kda >= 4 ? "text-kdaBlue" : kda >= 3 ? "text-kdaGreen" : "text-soloRatingTextGra";
+    const killPct = getKillPct(kills, deaths);
+    const kda = getKDA(kills, assists, deaths);
+    const winPct = getWinPct(wins, games);
+    const kdaColor = getKDAColor(kda);
 
     return (
         <div className="flex flex-row w-full text-sm text-recentSearchColor border-r border-soloRatingBoxBorder">

@@ -2,11 +2,11 @@ import React, { FC } from "react";
 import { Summoner } from "src/types";
 
 interface Props {
-    data: Summoner
+    summoner: Summoner
 }
 
-export const SoloRating: FC<Props> = ({ data }) => {
-    const leagueInfo = data.summoner.leagues[0];
+export const SoloRating: FC<Props> = ({ summoner }) => {
+    const leagueInfo = summoner.leagues[0];
     const totalGameCount = leagueInfo.wins + leagueInfo.losses;
     const winPercentage = Math.round((leagueInfo.wins / totalGameCount) * 100);
     return (

@@ -4,12 +4,13 @@ import styled from "@emotion/styled"
 import useMostInfo from "src/hooks/useMostInfo";
 import { ChampionRank } from "src/components/ChampionRank";
 import { WeekRank } from "src/components/WeekRank";
+import { ChampionStats, RecentWin } from "src/types";
 
 interface Props {
     summonerId: string;
 }
 
-interface TabPropType {
+interface TabProp {
     tab: string;
 }
 
@@ -32,10 +33,10 @@ export const ChampionInfo: FC<Props> = ({ summonerId }) => {
 
         if (tab === constants.CHAMPION_RATING) {
             contents = data.champions.sort((a: any, b: any) => { return b.games - a.games; });
-            return contents.map((champion: any, id: number) => <ChampionRank key={id} champion={champion} />)
+            return contents.map((champion: ChampionStats, id: number) => <ChampionRank key={id} champion={champion} />)
         } else if (tab === constants.RECENT_RATING) {
             contents = data.recentWinRate.sort((a: any, b: any) => { return (b.wins + b.losses) - (a.wins + a.losses); });
-            return contents.map((recentWin: any, id: number) => <WeekRank key={id} recentWin={recentWin} />)
+            return contents.map((recentWin: RecentWin, id: number) => <WeekRank key={id} recentWin={recentWin} />)
         }
     }
 
@@ -66,7 +67,7 @@ const ChampionWrapper = styled.div`
     font-size: small;
 `;
 
-const TabChampion = styled.div<TabPropType>`
+const TabChampion = styled.div<TabProp>`
     padding-top: 0.5rem;
     cursor: pointer;
     background-color: ${(props) => (props.tab === constants.CHAMPION_RATING && '#ededed')}; 
@@ -75,7 +76,7 @@ const TabChampion = styled.div<TabPropType>`
     border-bottom: ${(props) => (props.tab === constants.RECENT_RATING && '1px solid #cdd2d2')}; 
 `;
 
-const TabRecent = styled.div<TabPropType>`
+const TabRecent = styled.div<TabProp>`
     padding-top: 0.5rem;
     cursor: pointer;
     background-color: ${(props) => (props.tab === constants.RECENT_RATING && '#ededed')}; 

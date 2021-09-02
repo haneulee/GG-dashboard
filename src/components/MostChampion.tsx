@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import constants from "src/constants";
 import { Champion } from "src/types";
+import { getKDA, getKDAColor, getWinPct } from "src/util/utility";
 
 interface Props {
     champions: Champion[];
@@ -32,9 +33,9 @@ export const MostChampion: FC<Props> = ({ champions }) => {
         <div className="flex flex-col w-full text-sm border-r text-soloRatingText border-soloRatingBoxBorder">
             {champions.map((champion, index) => {
                 const games = champion.wins + champion.losses;
-                const winPct = Math.round((champion.wins / games) * 100);
-                const kda = Math.round((champion.kills + champion.assists) / champion.deaths);
-                const kdaColor = kda >= 5 ? "text-gameAvgYellow" : kda >= 4 ? "text-kdaBlue" : kda >= 3 ? "text-kdaGreen" : "text-soloRatingTextGra";
+                const kda = getKDA(champion.kills, champion.assists, champion.deaths);
+                const winPct = getWinPct(champion.wins, games);
+                const kdaColor = getKDAColor(kda);
 
                 return (
                     <div key={index} className="flex flex-row text-center text-xs">

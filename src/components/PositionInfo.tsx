@@ -1,6 +1,7 @@
 import { FC } from "react";
 import constants from "src/constants";
 import { Position } from "src/types";
+import { getWinPct } from "src/util/utility";
 
 interface Props {
     position: Position;
@@ -8,7 +9,7 @@ interface Props {
 
 
 export const PositionInfo: FC<Props> = ({ position }) => {
-    const winPct = Math.round((position.wins / position.games) * 100);
+    const winPct = getWinPct(position.wins, position.games);
     const ImgName = position.positionName === 'Top' ? 'icon-mostposition-top.png' :
         position.positionName === 'Jungle' ? 'icon-mostposition-jng.png' :
             position.positionName === 'Mid' ? 'icon-mostposition-mid.png' : 'icon-mostposition-sup.png';
