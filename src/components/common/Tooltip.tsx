@@ -23,8 +23,8 @@ const Container = styled.div`
 `;
 
 const TooltipText = styled.div`
-    top: -92px;
-    transform: translate(-105px,5px);
+    top: -105px;
+    transform: translate(-109px,5px);
     &::after {
         content: "";
         position: absolute;
