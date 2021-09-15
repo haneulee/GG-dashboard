@@ -1,37 +1,24 @@
-import React, { useEffect, useState } from "react";
-import Lottie from 'react-lottie';
-import Loading from "../lottie/lottie-loading.json"
-import { GameAverage } from "./GameAverage";
-import { GameList } from "./GameList";
-import { MostChampion } from "./MostChampion";
-import { PositionStat } from "./PositionStat";
+import React, { FC, useState } from "react";
+import styled from "styled-components";
+import useMatches from "src/hooks/useMatches";
+import { GameAverage } from "src/components/GameAverage";
+import { GameList } from "src/components/GameList";
+import { MostChampion } from "src/components/MostChampion";
+import { PositionStat } from "src/components/PositionStat";
+import constants from "src/constants";
 
-interface IGameInfoProps {
+interface Props {
     summonerId: string;
 }
 
-export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
-    const [gameType, setGameType] = useState('all');
-    const [loading, setLoading] = useState(false);
-    const [{ games, champions, summary, positions }, setData] = useState<any>({});
+export const GameInfo: FC<Props> = ({ summonerId }) => {
+    const [gameType, setGameType] = useState(constants.GAME_TAB_ALL);
+    const { data } = useMatches(summonerId);
+    const { games, champions, summary, positions } = data;
 
-    useEffect(() => {
-        if (summonerId) {
-            setLoading(true);
-            fetch(`https://codingtest.op.gg/api/summoner/${summonerId}/matches`)
-                .then(res => res.json())
-                .then(res => {
-                    if (res) {
-                        setData(res)
-                        setLoading(false);
-                    }
-                });
-        }
-    }, [])
-
-    const onTabClick = (e: any) => {
-        const { target } = e;
-        const targetType = target.getAttribute('data-type')
+    const onTabClick = (e: React.MouseEvent) => {
+        const targetEl = e.target as HTMLDivElement;
+        const targetType = targetEl.getAttribute('data-type') || '';
 
         if (targetType !== gameType) {
             setGameType(targetType);
@@ -40,32 +27,47 @@ export const GameInfo: React.FC<IGameInfoProps> = ({ summonerId }) => {
 
     return (
         <>
-            {loading ? <Lottie
-                options={{ animationData: Loading }}
-                style={{ width: '100%', height: '100%' }}
-            /> :
-                <>
-                    <div className="w-full m-2 text-tabColor text-sm bg-soloRatingBoxBackground border border-soloRatingBoxBorder">
-                        <div className="text-center flex flex-row pl-2 h-10 font-bold border-b border-soloRatingBoxBorder ">
-                            <div className={`p-2 cursor-pointer ${gameType === "all" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="all" onClick={onTabClick}>
-                                전체
-                            </div>
-                            <div className={`p-2 cursor-pointer ${gameType === "solo" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="solo" onClick={onTabClick}>
-                                솔로게임
-                            </div>
-                            <div className={`p-2 cursor-pointer ${gameType === "free" ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type="free" onClick={onTabClick}>
-                                자유랭크
-                            </div>
-                        </div>
-                        <div className="flex flex-row bg-championInfoBg">
-                            <GameAverage summary={summary} />
-                            <MostChampion champions={champions} />
-                            <PositionStat positions={positions} />
-                        </div>
+            <GameInfoWrapper>
+                <TabArea>
+                    <div className={`p-2 cursor-pointer ${gameType === constants.GAME_TAB_ALL ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type={constants.GAME_TAB_ALL} onClick={onTabClick}>
+                        {constants.GAME_TAB_ALL_TITLE}
                     </div>
-                    <GameList games={games} summonerId={summonerId} gameType={gameType} />
-                </>
-            }
+                    <div className={`p-2 cursor-pointer ${gameType === constants.GAME_TAB_SOLO ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type={constants.GAME_TAB_SOLO} onClick={onTabClick}>
+                        {constants.GAME_TAB_SOLO_TITLE}
+                    </div>
+                    <div className={`p-2 cursor-pointer ${gameType === constants.GAME_TAB_FREE ? 'border-b-2 border-soloRatingTextBlue text-soloRatingTextBlue' : ''}`} data-type={constants.GAME_TAB_FREE} onClick={onTabClick}>
+                        {constants.GAME_TAB_FREE_TITLE}
+                    </div>
+                </TabArea>
+                <div className="flex flex-row bg-championInfoBg">
+                    <GameAverage summary={summary} />
+                    <MostChampion champions={champions} />
+                    <PositionStat positions={positions} />
+                </div>
+            </GameInfoWrapper>
+            <GameList games={games} summonerId={summonerId} gameType={gameType} />
         </>
     )
 };
+
+const GameInfoWrapper = styled.div`
+    width: 100%;
+    height: auto;
+    margin: 0.5rem;
+    width: 700px;
+    color: #555555;
+    background-color: #f2f2f2;
+    border: 1px solid #cdd2d2;
+    font-size: small;
+`;
+
+const TabArea = styled.div`
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    padding-left: 0.5rem;
+    height: 2rem;
+    border-bottom: 1px solid #cdd2d2;
+    line-height: normal;
+`;

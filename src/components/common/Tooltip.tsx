@@ -1,9 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from '@emotion/styled'
 
-interface ITooltipProps {
+interface Props {
     children: React.ReactNode;
     message: string;
+}
+
+export const Tooltip: FC<Props> = ({ children, message }) => {
+    return (
+        <Container className="relative w-max h-max">
+            {children}
+            <TooltipText className="tooltip absolute z-50 hidden animate-tooltip bg-tooltipColor text-white w-60 p-2 rounded-lg">{message}</TooltipText>
+        </Container>
+    );
 }
 
 const Container = styled.div`
@@ -14,8 +23,8 @@ const Container = styled.div`
 `;
 
 const TooltipText = styled.div`
-    top: -92px;
-    transform: translate(-105px,5px);
+    top: -105px;
+    transform: translate(-109px,5px);
     &::after {
         content: "";
         position: absolute;
@@ -27,12 +36,3 @@ const TooltipText = styled.div`
         border-color: #222727 transparent transparent transparent;
     }
 `;
-
-export const Tooltip: React.FC<ITooltipProps> = ({ children, message }) => {
-    return (
-        <Container className="relative w-max h-max">
-            {children}
-            <TooltipText className="tooltip absolute z-50 hidden animate-tooltip bg-tooltipColor text-white w-60 p-2 rounded-lg">{message}</TooltipText>
-        </Container>
-    );
-}
